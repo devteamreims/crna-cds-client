@@ -1,0 +1,41 @@
+@import "compass/css3/font-face";
+
+@include font-face('Roboto', 
+  font-files('Roboto-Light.woff', 'Roboto-Light.ttf', 'Roboto-Light.svg'),
+  'Roboto-Light.eot', 300);
+@include font-face('Roboto', 
+  font-files('Roboto-Regular.woff', 'Roboto-Regular.ttf', 'Roboto-Regular.svg'),
+  'Roboto-Regular.eot', 400);
+@include font-face('Roboto', 
+  font-files('Roboto-Medium.woff', 'Roboto-Medium.ttf', 'Roboto-Medium.svg'),
+  'Roboto-Medium.eot', 500);
+@include font-face('Roboto', 
+  font-files('Roboto-Bold.woff', 'Roboto-Bold.ttf', 'Roboto-Bold.svg'),
+  'Roboto-Bold.eot', 700);
+
+/*
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'), url(http://fonts.gstatic.com/s/roboto/v15/Hgo13k-tfSpn0qi1SFdUfaCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'), url(http://fonts.gstatic.com/s/roboto/v15/zN7GBFwfMP4uA6AR0HCoLQ.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Roboto Medium'), local('Roboto-Medium'), url(http://fonts.gstatic.com/s/roboto/v15/RxZJdnzeo3R5zSexge8UUaCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'), url(http://fonts.gstatic.com/s/roboto/v15/d-6IYplOFocCacKzxwXSOKCWcynf_cDxXwCLxiixG1c.ttf) format('truetype');
+}
+*/

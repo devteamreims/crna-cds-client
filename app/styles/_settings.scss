@@ -1,0 +1,85 @@
+// CRNA App settings
+
+// Header settings
+//$header-background: $blue;
+//$header-background-active: $blue-700;
+//$header-height: 80px;
+
+// Global font size (everything else is rem, yay !)
+//$app-font-zoom: 130%;
+
+
+$fourme-primary-color: $indigo-500;
+$fourme-accent-color: $deep-orange-500;
+
+/*
+.bgc-main-color {
+  @extend .bgc-blue-500;
+}
+
+.tc-main-color {
+  @extend .tc-white;
+}
+*/
+// Some background mixins
+
+@mixin success-background-color($type: light) {
+  @if $type == light {
+    background-color: $green-100;
+  } @else {
+    background-color: $green-500;
+  }
+}
+
+@mixin warning-background-color($type: light) {
+  @if $type == light {
+    background-color: $orange-100;
+  } @else {
+    background-color: $orange-500;
+  }
+}
+
+
+@mixin danger-background-color($type: light) {
+  @if $type == light {
+    background-color: $red-100;
+  } @else {
+    background-color: $red-500;
+  }
+}
+
+// Same with text color
+@mixin success-color($type: dark) {
+  @if $type == dark {
+    color: $green-500;
+  } @else {
+    color: $green-100;
+  }
+}
+
+@mixin warning-color($type: dark) {
+  @if $type == dark {
+    color: $orange-500;
+  } @else {
+    color: $orange-100;
+  }
+}
+
+@mixin danger-color($type: dark) {
+  @if $type == dark {
+    color: $red-500;
+  } @else {
+    color: $red-100;
+  }
+}
+
+/* Text mixins */
+/*
+@mixin text-muted($type: dark) {
+  @if $type == dark {
+    color: $black-2;
+  } @else {
+    color: $white-3;
+  }
+}
+*/

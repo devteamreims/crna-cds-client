@@ -1,0 +1,75 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
+    <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css" />
+    <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.min.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body layout="column" layout-fill ng-app="4meCdsApp">
+    <md-toolbar layout="row" layout-padding>
+    <div layout="row" layout-align="space-between center" class="md-toolbar-tools" flex>
+      <h1 flex class="md-toolbar-tools md-breadcrumb">
+      <span class="md-breadcrumb-page">X &gt; y</span>
+      </h1>
+      <div flex layout="row" class="md-toolbar-tools" layout-align="end center">
+          <crna-choose-position><md-button aria-label="Configure position" class="md-icon-button"><i class="mdi mdi-settings"></i></md-button></crna-choose-position>
+          <crna-help-button><md-button aria-label="Help" class="md-icon-button"><i class="mdi mdi-help"></i></md-button></crna-help-button>
+          <crna-reload-app><md-button aria-label="Reload app" class="md-icon-button"><i class="mdi mdi-refresh"></i></md-button></crna-reload-app>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-content ui-view layout-fill flex></md-content>
+
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/angular-moment/angular-moment.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
+  <script src="bower_components/nvd3/build/nv.d3.js"></script>
+  <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
+  <script src="bower_components/angular-socket-io/socket.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/underscore/underscore.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+  <script src="socket.io/socket.io.js"></script>
+
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+
+  <script src="scripts/config.js"></script>
+
+  <script src="scripts/io.js"></script>
+  <script src="scripts/underscore.js"></script>
+  <script src="scripts/routes.js"></script>
+  <script src="scripts/constants.js"></script>
+
+  <script src="scripts/ctrlroom/ctrlroom.js"></script>
+  <script src="scripts/ctrlroom/ctrlroomControllers.js"></script>
+  <!-- endbuild -->
+</body>
+</html>
