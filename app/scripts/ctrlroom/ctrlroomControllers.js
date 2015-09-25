@@ -12,5 +12,4 @@ angular.module('ctrlroomControllers', ['underscore'])
 CtrlRoomController.$inject = ['$scope'];
 function CtrlRoomController($scope) {
   var vm = this;
-  vm.pouet = "CACABOUDIN";
 }

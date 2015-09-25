@@ -7,4 +7,4 @@
  * # ctrlroom module
  * Meta module to include control room components
  */
-angular.module('ctrlroom', ['ctrlroomControllers']);
+angular.module('ctrlroom', ['ctrlroomControllers', 'ctrlroomDirectives']);
