@@ -1,4 +1,4 @@
-<md-button class="md-fab position-button" ng-class="vm.positionClass(vm.position)" ng-disabled="vm.positionDisabled" aria-label="P{{vm.position.id}}">
+<md-button class="md-fab position-button" ng-class="vm.positionClass(vm.position)" ng-disabled="vm.positionDisabled" aria-label="P{{vm.position.id}}" ng-click="vm.showDialog()">
   <i ng-if="vm.loading" class="mdi mdi-loading"></i>
   <span ng-if="!vm.loading" class="position">{{"P" + vm.position.id}}</span>
   <span ng-if="!vm.loading" class="sector">{{vm.position.sectorString}}</span>

@@ -24,10 +24,9 @@ function ctrlroomButton() {
   };
 }
 
-ctrlroomButtonController.$inject = ['_', '$scope', '$q', 'ctrlroomPosition', '$timeout'];
-function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout) {
+ctrlroomButtonController.$inject = ['_', '$scope', '$q', 'ctrlroomPosition', '$timeout', '$mdDialog'];
+function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout, $mdDialog) {
   var vm = this;
-  vm.positionClass = 'md-primary';
   vm.positionDisabled = true;
   vm.loading = true;
 
@@ -41,13 +40,34 @@ function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout) {
       return '';
     } else {
       if(_.isEmpty(position.sectors)) {
-        return 'md-accent';
+        return 'md-primary md-hue-3';
       } else {
-        return 'md-primary';
+        return 'md-accent md-hue-2';
       }
+    }
+  }
+
+  vm.showDialog = function(ev) {
+    if(vm.position.disabled !== true) {
+      $mdDialog.show({
+        controller: ctrlroomDialogController,
+        templateUrl: 'views/ctrlroom/_dialog.html',
+        locals: {
+          position: vm.position
+        },
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose: true
+      });
     }
   }
 
   vm.positionDisabled = vm.position.disabled;
 
+}
+
+ctrlroomDialogController.$inject = ['_', '$scope', 'ctrlroomPosition', 'position'];
+function ctrlroomDialogController(_, $scope, ctrlroomPosition, position) {
+  var vm = this;
+  $scope.position = position;
 }
