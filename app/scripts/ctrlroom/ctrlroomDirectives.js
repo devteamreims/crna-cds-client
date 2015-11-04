@@ -7,7 +7,7 @@
  * # ctrlroomDirectives
  * Directives for the control room management
  **/
-angular.module('ctrlroomDirectives', ['ctrlroomServices'])
+angular.module('ctrlroomDirectives', ['underscore', 'ctrlroomServices'])
 // ARCID Single flight detail panel
 .directive('ctrlroomButton', ctrlroomButton);
 
@@ -24,14 +24,30 @@ function ctrlroomButton() {
   };
 }
 
-ctrlroomButtonController.$inject = ['$scope', '$q', 'ctrlroomPosition'];
-function ctrlroomButtonController($scope, $q, ctrlroomPosition) {
+ctrlroomButtonController.$inject = ['_', '$scope', '$q', 'ctrlroomPosition', '$timeout'];
+function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout) {
   var vm = this;
-  vm.positionClass = 'md-primary md-hue-1';
-  vm.loading=true;
-  $q.when(ctrlroomPosition.get($scope.position)).then(function(position) {
-    vm.loading = false;
-    vm.position = position;
-    vm.positionClass = 'md-accent';
-  });
+  vm.positionClass = 'md-primary';
+  vm.positionDisabled = true;
+  vm.loading = true;
+
+  ctrlroomPosition.refreshAll(); // This needs to be set somewhere else
+
+  vm.loading = false;
+  vm.position = ctrlroomPosition.get($scope.position);
+
+  vm.positionClass = function(position) {
+    if(position.disabled === true) {
+      return '';
+    } else {
+      if(_.isEmpty(position.sectors)) {
+        return 'md-accent';
+      } else {
+        return 'md-primary';
+      }
+    }
+  }
+
+  vm.positionDisabled = vm.position.disabled;
+
 }
