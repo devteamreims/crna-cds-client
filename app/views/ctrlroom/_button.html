@@ -1,4 +1,5 @@
-<md-button class="md-fab position-button md-primary md-hue-1" aria-label="P{{vm.position}}">
-  <span class="position">P{{vm.position}}</span>
-  <span class="sector md-accent">KHR</span>
+<md-button class="md-fab position-button" ng-class="vm.positionClass" aria-label="P{{vm.position.id}}">
+  <md-button aria-label="Help" class="md-icon-button" ng-if="vm.loading"><i class="mdi mdi-help"></i></md-button>
+  <span ng-if="!vm.loading" class="position">{{"P" + vm.position.id}}</span>
+  <span ng-if="!vm.loading" class="sector md-accent">{{vm.position.sectorString}}</span>
 </md-button>

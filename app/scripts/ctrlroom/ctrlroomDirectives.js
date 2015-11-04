@@ -7,10 +7,9 @@
  * # ctrlroomDirectives
  * Directives for the control room management
  **/
-angular.module('ctrlroomDirectives', [])
+angular.module('ctrlroomDirectives', ['ctrlroomServices'])
 // ARCID Single flight detail panel
 .directive('ctrlroomButton', ctrlroomButton);
-
 
 /* ctrlroomButton */
 function ctrlroomButton() {
@@ -25,8 +24,14 @@ function ctrlroomButton() {
   };
 }
 
-ctrlroomButtonController.$inject = ['$scope'];
-function ctrlroomButtonController($scope) {
+ctrlroomButtonController.$inject = ['$scope', '$q', 'ctrlroomPosition'];
+function ctrlroomButtonController($scope, $q, ctrlroomPosition) {
   var vm = this;
-  vm.position = $scope.position;
+  vm.positionClass = 'md-primary md-hue-1';
+  vm.loading=true;
+  $q.when(ctrlroomPosition.get($scope.position)).then(function(position) {
+    vm.loading = false;
+    vm.position = position;
+    vm.positionClass = 'md-accent';
+  });
 }
