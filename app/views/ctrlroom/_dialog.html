@@ -1,1 +1,44 @@
-CACABOUDIN, click sur position {{position.id}} !!
+<md-dialog layout="column" ng-cloak>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <h2>Position {{position.id}}</h2>
+      <span flex></span>
+      <md-button class="md-icon-button" ng-click="cancel()">
+        <i class="mdi mdi-large mdi-close"></i>
+      </md-button>
+    </div>
+  </md-toolbar>
+  <md-dialog-content layout="column">
+    <div class="md-dialog-content">
+      <h2>Blablabla dégroupement</h2>
+      <div layout="column">
+        <div class="URMN" layout="row">
+          <div class="5R">
+            <fieldset class="5R">
+              <legend>5R</legend>
+              <md-checkbox>HYR</md-checkbox>
+              <md-checkbox>KR</md-checkbox>
+              <md-checkbox>XR</md-checkbox>
+              <md-checkbox>UR</md-checkbox>
+            </fieldset>
+          </div>
+          <div class="4N">
+            <md-checkbox>HN</md-checkbox>
+            <md-checkbox>KN</md-checkbox>
+            <md-checkbox>UB</md-checkbox>
+            <md-checkbox>UN</md-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+  </md-dialog-content>
+  <div class="md-actions">
+    <span flex></span>
+    <md-button ng-click="cancel()">
+      ANNULER
+    </md-button>
+    <md-button ng-click="confirm()">
+      ACCEPTER
+    </md-button>
+  </div>
+</md-dialog>

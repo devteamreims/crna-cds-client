@@ -8,12 +8,13 @@
  * Services for the control room management
  **/
 angular.module('ctrlroomServices', ['4meCdsConstants', 'underscore'])
-.factory('ctrlroomPosition', ctrlroomPosition);
+.factory('ctrlroomPosition', ctrlroomPosition)
+.factory('ctrlroomManager', ctrlroomManager);
 
-ctrlroomPosition.$inject = ['_', '$q', '$timeout', 'crnaPositions'];
 
-function ctrlroomPosition(_, $q, $timeout, crnaPositions) {
-
+/* Whole control room management */
+ctrlroomManager.$inject = ['_', '$q', '$timeout', 'crnaPositions','ctrlroomPosition'];
+function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
   /*
    * Format :
    * {
@@ -28,36 +29,25 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions) {
   */
   var positions = [];
 
-
   /*
-   * Populate array with empty values
+   * Populate array with empty objects
   */
   _.each(crnaPositions, function(positionId) {
-    positions.push({
-      id: parseInt(positionId),
-      sectors: [],
-      sectorString: '',
-      disabled: false
-    });
+    var positionInstance = ctrlroomPosition.getInstance(parseInt(positionId));
+    positionInstance.disabled = false; // Set disabled to false
+    positions.push(positionInstance);
   });
 
-
   /*
-   * get()
+   * getSingle(positionId)
    * get a single position status
   */
-  function get(positionId) {
+  function getSingle(positionId) {
     // Locate current position in our collection
     var s = _.findWhere(positions, {id: positionId});
     if(s === undefined) { // Positions 15 and 16 ?
-      s = {
-        id: positionId,
-        sectors: [],
-        sectorString: '',
-        disabled: true // Set as disabled positions
-      };
+      s = ctrlroomPosition.getInstance(positionId);
     }
-
     return s;
   };
 
@@ -74,25 +64,29 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
-            s.sectors = ['UR', 'XR'];
-            s.sectorString = 'UXR';
+            s.setSectors(['UR', 'XR']);
           }, 3000)
         );
       } else if(positionId === 32) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
-            s.sectors = ['KR', 'HR'];
-            s.sectorString = 'KHR';
+            s.setSectors(['KR', 'YR', 'HR']);
           }, 5000)
         );
       } else if(positionId === 36) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
-            s.sectors = ['UN', 'UB', 'KN', 'HN'];
-            s.sectorString = '4N';
+            s.setSectors(['UN', 'UB', 'KN', 'HN']);
           }, 7000)
+        );
+      } else if(positionId === 21) {
+        promises.push(
+          $timeout(function() {
+            var s = _.findWhere(positions, {id: positionId});
+            s.setSectors(['UH', 'XH']);
+          }, 4000)
         );
       }
     });
@@ -100,19 +94,60 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions) {
     return $q.all(promises);
   };
 
-  function set(positionId, sectors) {
-    var defer = $q.defer();
-
-    return defer.promise;
-  };
-
   var service = {
-    get: get,
-    refreshAll: refreshAll,
-    set: set
+    getSingle: getSingle,
+    refreshAll: refreshAll
   };
 
   return service;
+
+}
+
+/* Single position factory */
+ctrlroomPosition.$inject = ['_', '$q', '$timeout', 'crnaPositions', 'crnaAtomicSectors', 'crnaSectors'];
+function ctrlroomPosition(_, $q, $timeout, crnaPositions, crnaAtomicSectors, crnaSectors) {
+
+  var ctrlroomPosition = function(positionId) {
+    this.id = positionId;
+    this.sectors = [];
+    this.disabled = true;
+    this.sectorString = '';
+  };
+
+
+  ctrlroomPosition.prototype.setSectors = function(sectors) {
+    var self = this;
+    self.sectors = sectors;
+
+    // compute sectorString once and for all
+    var sectorString = '-'
+    if(self.sectors.length !== 0) {
+      var sct = _.find(crnaSectors, function(e) {
+        return _.isEqual(self.sectors.sort(), e.children.sort());
+      });
+      if(sct === undefined) {
+        sectorString = self.sectors.toString();
+      } else {
+        sectorString = sct.name;
+      }
+    }
+
+    self.sectorString = sectorString;
+
+    return self;
+
+  };
+
+  ctrlroomPosition.prototype.getSuggestedSectors = function() {
+    var self = this;
+    return _.difference(crnaAtomicSectors, self.sectors);
+  };
+
+  return {
+    getInstance: function(positionId) {
+      return new ctrlroomPosition(positionId);
+    }
+  };
 
 }
 

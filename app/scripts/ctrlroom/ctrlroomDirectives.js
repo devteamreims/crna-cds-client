@@ -24,16 +24,16 @@ function ctrlroomButton() {
   };
 }
 
-ctrlroomButtonController.$inject = ['_', '$scope', '$q', 'ctrlroomPosition', '$timeout', '$mdDialog'];
-function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout, $mdDialog) {
+ctrlroomButtonController.$inject = ['_', '$scope', '$q', 'ctrlroomManager', '$timeout', '$mdDialog'];
+function ctrlroomButtonController(_, $scope, $q, ctrlroomManager, $timeout, $mdDialog) {
   var vm = this;
   vm.positionDisabled = true;
   vm.loading = true;
 
-  ctrlroomPosition.refreshAll(); // This needs to be set somewhere else
+  ctrlroomManager.refreshAll(); // This needs to be set somewhere else
 
   vm.loading = false;
-  vm.position = ctrlroomPosition.get($scope.position);
+  vm.position = ctrlroomManager.getSingle($scope.position);
 
   vm.positionClass = function(position) {
     if(position.disabled === true) {
@@ -48,7 +48,8 @@ function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout, $md
   }
 
   vm.showDialog = function(ev) {
-    if(vm.position.disabled !== true) {
+    /* Filter out disabled positions */
+    if(vm.position.disabled === false) {
       $mdDialog.show({
         controller: ctrlroomDialogController,
         templateUrl: 'views/ctrlroom/_dialog.html',
@@ -66,8 +67,14 @@ function ctrlroomButtonController(_, $scope, $q, ctrlroomPosition, $timeout, $md
 
 }
 
-ctrlroomDialogController.$inject = ['_', '$scope', 'ctrlroomPosition', 'position'];
-function ctrlroomDialogController(_, $scope, ctrlroomPosition, position) {
+ctrlroomDialogController.$inject = ['_', '$scope', 'ctrlroomPosition', 'position', '$mdDialog'];
+function ctrlroomDialogController(_, $scope, ctrlroomPosition, position, $mdDialog) {
   var vm = this;
   $scope.position = position;
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.confirm = function() {
+    $mdDialog.hide();
+  };
 }
