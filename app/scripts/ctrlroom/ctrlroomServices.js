@@ -28,6 +28,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
    * }
   */
   var positions = [];
+  var changes = false;
 
   /*
    * Populate array with empty objects
@@ -49,7 +50,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
       s = ctrlroomPosition.getInstance(positionId);
     }
     return s;
-  };
+  }
 
   /*
    * refreshAll()
@@ -91,12 +92,37 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
       }
     });
 
-    return $q.all(promises);
-  };
+    return $q.all(promises).then(function() {
+      self.changes = false;
+    });
+  }
+
+  function addSectors(newPosition, sectors) {
+    if(sectors === undefined || sectors.length === 0) { // Input sanitation
+      return false;
+    }
+
+
+    /* We need to find all positions with said sectors and remove them */
+    _.each(sectors, function(s) { // Loop through given sectors
+      var oldPosition = _.find(positions, function(p) { // Loop through positions and find the one bound to sector
+        return _.contains(p.sectors, s);
+      });
+      oldPosition.changed = true; // Activate changed flag
+      oldPosition.setSectors(_.without(oldPosition.sectors, s)); // Remove from given position
+    });
+
+    newPosition.changed = true; // Activate changed flag
+    newPosition.setSectors(_.union(newPosition.sectors, sectors)); // Bind to new position
+
+    return true;
+
+  }
 
   var service = {
     getSingle: getSingle,
-    refreshAll: refreshAll
+    refreshAll: refreshAll,
+    addSectors: addSectors
   };
 
   return service;
@@ -111,31 +137,40 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, crnaAtomicSectors, crn
     this.id = positionId;
     this.sectors = [];
     this.disabled = true;
-    this.sectorString = '';
+    this.sectorString = '-';
+    this.changed = false;
   };
 
 
   ctrlroomPosition.prototype.setSectors = function(sectors) {
     var self = this;
     self.sectors = sectors;
+    self.sectorString = self.computeSectorString();
 
+    return self;
+  };
+
+  ctrlroomPosition.prototype.computeSectorString = function(sectors) {
+    var self = this;
+    var s = sectors;
+    if(s === undefined || s.length === 0) {
+      s = self.sectors;
+    }
+
+    var allSectors = crnaSectors;
     // compute sectorString once and for all
-    var sectorString = '-'
-    if(self.sectors.length !== 0) {
-      var sct = _.find(crnaSectors, function(e) {
-        return _.isEqual(self.sectors.sort(), e.children.sort());
+    var sectorString = '-';
+    if(s.length !== 0) {
+      var sct = _.find(allSectors, function(e) {
+        return _.isEqual(s.sort(), e.children.sort());
       });
       if(sct === undefined) {
-        sectorString = self.sectors.toString();
+        sectorString = s.toString();
       } else {
         sectorString = sct.name;
       }
     }
-
-    self.sectorString = sectorString;
-
-    return self;
-
+    return sectorString;
   };
 
   ctrlroomPosition.prototype.getSuggestedSectors = function() {
