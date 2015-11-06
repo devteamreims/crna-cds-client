@@ -107,13 +107,13 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
   vm.toggleSector = function(s) {
     console.log(vm.selectedSectors);
     if(_.indexOf(vm.selectedSectors, s) !== -1) { // Already selected sector, remove it
-      if(s == 'HR' || s == 'YR') {
+      if(s === 'HR' || s === 'YR') {
         vm.selectedSectors = _.without(vm.selectedSectors, 'HR', 'YR');
       } else {
         vm.selectedSectors = _.without(vm.selectedSectors, s);
       }
     } else {
-      if(s == 'HR' || s == 'YR') {
+      if(s === 'HR' || s === 'YR') {
         vm.selectedSectors.push('HR');
         vm.selectedSectors.push('YR');
       } else {
