@@ -98,6 +98,15 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             s.changed = false;
           }, 1500)
         );
+      } else {
+        // Empty position
+        promises.push(
+          $timeout(function() {
+            var s = _.findWhere(positions, {id: positionId});
+            s.setSectors([]);
+            s.changed = false;
+          }, 100)
+        );
       }
     });
 
