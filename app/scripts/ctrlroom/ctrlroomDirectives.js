@@ -28,7 +28,6 @@ ctrlroomDashboardController.$inject = ['ctrlroomManager'];
 function ctrlroomDashboardController(ctrlroomManager) {
   var vm = this;
   vm.hasChanges = function() {
-    console.log('hasChanges called !');
     if(ctrlroomManager.properties.hasChanges === true) {
       return true;
     } else {
