@@ -29,7 +29,8 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
   */
   var positions = [];
   var properties = {
-    hasChanges: false
+    hasChanges: false,
+    loading: true
   };
 
   /*
@@ -62,6 +63,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     var self = this;
     // Simulate async stuff
     var promises = [];
+    self.properties.loading = true;
     _.each(crnaPositions, function(positionId) { /* Mock 3 open positions */
       positionId = parseInt(positionId);
       if(positionId === 31) {
@@ -100,6 +102,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     });
 
     return $q.all(promises).then(function() {
+      self.properties.loading = false;
       self.properties.hasChanges = false;
     });
   }
@@ -128,11 +131,20 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
 
   }
 
+  function commitChanges() {
+    // Commit changes to backend
+    self.properties.loading = true;
+    return $timeout(function() {
+      self.properties.loading = false;
+    }, 3000);
+  }
+
   var service = {
     getSingle: getSingle,
     refreshAll: refreshAll,
     addSectors: addSectors,
-    properties: properties
+    properties: properties,
+    commitChanges: commitChanges
   };
 
   return service;

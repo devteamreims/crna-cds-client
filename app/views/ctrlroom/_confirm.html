@@ -1,8 +1,8 @@
 <div ng-show="vm.isVisible()" ng-cloak class="position-tool" md-theme="success-warning">
-  <md-button class="md-primary md-fab md-warn" ng-click="vm.cancel()">
+  <md-button class="md-primary md-fab md-warn" ng-disabled="vm.isLoading()" ng-click="vm.cancel()">
     <i class="mdi mdi-close"></i>
   </md-button>
-  <md-button class="md-primary md-fab">
+  <md-button ng-disabled="vm.isLoading()" class="md-primary md-fab">
     <i class="mdi mdi-check"></i>
   </md-button>
 </div>

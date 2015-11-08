@@ -76,6 +76,14 @@ function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdD
     }
   }
 
+  vm.isLoading = function() {
+    if(ctrlroomManager.properties.loading === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   vm.showDialog = function(ev) {
     /* Filter out disabled positions */
     if(vm.position.disabled === false) {
@@ -112,6 +120,15 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
     // We need to add selectedSectors to our position
     ctrlroomManager.addSectors(vm.position, vm.selectedSectors);
     $mdDialog.hide();
+  };
+
+  vm.isLoading = function() {
+    console.log('isLoading called !')
+    if(ctrlroomManager.properties.loading === true) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   vm.isChecked = function(s) {
@@ -170,7 +187,14 @@ function ctrlroomConfirmPanelController(_, ctrlroomManager) {
     } else {
       return false;
     }
-    //return ctrlroomManager.properties.hasChanges;
+  };
+
+  vm.isLoading = function() {
+    if(ctrlroomManager.properties.loading === true) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   vm.cancel = function() {
