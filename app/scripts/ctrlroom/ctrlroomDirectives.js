@@ -8,8 +8,35 @@
  * Directives for the control room management
  **/
 angular.module('ctrlroomDirectives', ['underscore', 'ctrlroomServices'])
-// ARCID Single flight detail panel
-.directive('ctrlroomButton', ctrlroomButton);
+// Wrapper directive
+.directive('ctrlroomDashboard', ctrlroomDashboard)
+// Position button directive
+.directive('ctrlroomButton', ctrlroomButton)
+// Save / cancel changes button
+.directive('ctrlroomConfirmPanel', ctrlroomConfirmPanel);
+
+function ctrlroomDashboard() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/ctrlroom/_dashboard.html',
+    controller: ctrlroomDashboardController,
+    controllerAs: 'vm'
+  }; 
+}
+
+ctrlroomDashboardController.$inject = ['ctrlroomManager'];
+function ctrlroomDashboardController(ctrlroomManager) {
+  var vm = this;
+  vm.hasChanges = function() {
+    console.log('hasChanges called !');
+    if(ctrlroomManager.properties.hasChanges === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+}
+
 
 /* ctrlroomButton */
 function ctrlroomButton() {
@@ -24,8 +51,8 @@ function ctrlroomButton() {
   };
 }
 
-ctrlroomButtonController.$inject = ['_', '$scope', '$q', 'ctrlroomManager', '$timeout', '$mdDialog'];
-function ctrlroomButtonController(_, $scope, $q, ctrlroomManager, $timeout, $mdDialog) {
+ctrlroomButtonController.$inject = ['_','ctrlroomManager', '$scope', '$q', '$timeout', '$mdDialog'];
+function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdDialog) {
   var vm = this;
   vm.positionDisabled = true;
   vm.loading = true;
@@ -105,7 +132,6 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
   };
 
   vm.toggleSector = function(s) {
-    console.log(vm.selectedSectors);
     if(_.indexOf(vm.selectedSectors, s) !== -1) { // Already selected sector, remove it
       if(s === 'HR' || s === 'YR') {
         vm.selectedSectors = _.without(vm.selectedSectors, 'HR', 'YR');
@@ -123,4 +149,33 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
     // Recompute newSectorString
     vm.newSectorString = vm.position.computeSectorString(_.union(vm.selectedSectors, vm.position.sectors));
   };
+}
+
+function ctrlroomConfirmPanel(_, ctrlroomManager) {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/ctrlroom/_confirm.html',
+    controller: ctrlroomConfirmPanelController,
+    controllerAs: 'vm',
+    scope: {}
+  };
+}
+
+ctrlroomConfirmPanelController.$inject = ['_', 'ctrlroomManager'];
+function ctrlroomConfirmPanelController(_, ctrlroomManager) {
+  var vm = this;
+
+  vm.isVisible = function() {
+    if(ctrlroomManager.properties.hasChanges === true) {
+      return true;
+    } else {
+      return false;
+    }
+    //return ctrlroomManager.properties.hasChanges;
+  };
+
+  vm.cancel = function() {
+    return ctrlroomManager.refreshAll();
+  }
+
 }

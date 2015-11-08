@@ -28,7 +28,9 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
    * }
   */
   var positions = [];
-  var changes = false;
+  var properties = {
+    hasChanges: false
+  };
 
   /*
    * Populate array with empty objects
@@ -57,6 +59,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
    * refresh all position statuses from server
   */
   function refreshAll() {
+    var self = this;
     // Simulate async stuff
     var promises = [];
     _.each(crnaPositions, function(positionId) { /* Mock 3 open positions */
@@ -66,38 +69,43 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UR', 'XR']);
-          }, 3000)
+            s.changed = false;
+          }, 1000)
         );
       } else if(positionId === 32) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['KR', 'YR', 'HR']);
-          }, 5000)
+            s.changed = false;
+          }, 2000)
         );
       } else if(positionId === 36) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UN', 'UB', 'KN', 'HN']);
-          }, 7000)
+            s.changed = false;
+          }, 2500)
         );
       } else if(positionId === 21) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UH', 'XH']);
-          }, 4000)
+            s.changed = false;
+          }, 1500)
         );
       }
     });
 
     return $q.all(promises).then(function() {
-      self.changes = false;
+      self.properties.hasChanges = false;
     });
   }
 
   function addSectors(newPosition, sectors) {
+    var self = this;
     if(sectors === undefined || sectors.length === 0) { // Input sanitation
       return false;
     }
@@ -115,6 +123,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     newPosition.changed = true; // Activate changed flag
     newPosition.setSectors(_.union(newPosition.sectors, sectors)); // Bind to new position
 
+    self.properties.hasChanges = true;
     return true;
 
   }
@@ -122,7 +131,8 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
   var service = {
     getSingle: getSingle,
     refreshAll: refreshAll,
-    addSectors: addSectors
+    addSectors: addSectors,
+    properties: properties
   };
 
   return service;

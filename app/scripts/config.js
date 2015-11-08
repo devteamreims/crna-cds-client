@@ -24,9 +24,12 @@ function applyTheme($mdThemingProvider) {
     })
     ;
   $mdThemingProvider.theme('success-warning')
-    .primaryPalette('green')
+    .primaryPalette('green', {
+      'default': '600'
+    })
     .accentPalette('orange', {
       'default': '800'
     })
+    .warnPalette('red')
     ;
 }

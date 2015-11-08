@@ -15,8 +15,7 @@ angular.module('4meCdsRoutes', ['ui.router'])
   $stateProvider
     .state('root', {
       url: '/',
-      templateUrl: 'views/dashboard.html',
-      controller: 'CtrlRoomController'
+      templateUrl: 'views/dashboard.html'
     });
 }]);
 
