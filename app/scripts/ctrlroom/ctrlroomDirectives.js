@@ -34,6 +34,15 @@ function ctrlroomDashboardController(ctrlroomManager) {
       return false;
     }
   };
+
+  vm.isLoading = function() {
+    if(ctrlroomManager.properties.loading === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
 }
 
 

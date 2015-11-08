@@ -1,22 +1,23 @@
+ <md-progress-linear style="position: absolute;" ng-if="vm.isLoading()" class="md-warn" md-mode="indeterminate"></md-progress-linear>
 <div layout-padding layout="column" id="ctrlroom-dashboard" ng-class="{'has-changes': vm.hasChanges()}" flex>
   <ctrlroom-confirm-panel></ctrlroom-confirm-panel>
-  <div layout="row" layout-align="center center">
+  <div layout="row" layout-align="center center" flex>
     <ctrlroom-button position="23"></ctrlroom-button>
     <ctrlroom-button position="24"></ctrlroom-button>
   </div>
-  <div layout="row" layout-align="center">
+  <div layout="row" layout-align="center" flex>
     <ctrlroom-button position="22"></ctrlroom-button>
     <ctrlroom-button position="25"></ctrlroom-button>
   </div>
-  <div layout="row" layout-align="center">
+  <div layout="row" layout-align="center" flex>
     <ctrlroom-button position="21"></ctrlroom-button>
     <ctrlroom-button position="26"></ctrlroom-button>
   </div>
-  <div layout="row" layout-align="center">
+  <div layout="row" layout-align="center" flex>
     <ctrlroom-button position="20"></ctrlroom-button>
     <ctrlroom-button position="27"></ctrlroom-button>
   </div>
-  <div layout="row">
+  <div layout="row" flex>
     <div layout="column" flex="40" layout-align="end end">
       <div layout="row">
         <ctrlroom-button position="14"></ctrlroom-button>
