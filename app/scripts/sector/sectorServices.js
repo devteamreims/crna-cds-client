@@ -88,6 +88,28 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
   }
 
   /*
+   * getFromString() (async)
+   * returns a promise of expanded list of
+   * elementary sectors given a grouping name
+   */
+  function getFromString(str) {
+    var promise = getAll()
+    // getAll and expandAll
+    .then(function(sectors) {
+      // Find with string
+      var sectorsGroup = _.findWhere(sectors, {name: str});
+      if(sectorsGroup === undefined) {
+        // Not found ! Should never happen ?
+        return [];
+      } else {
+        // Return array of children
+        return sectorsGroup.children;
+      }
+    });
+    return promise;
+  }
+
+  /*
    * _expandAll() (async)
    * returns a promise of expanded sectors tree
    * sets internal sectors var to expanded sectors tree
@@ -101,10 +123,10 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
     // Get all elementary sectors
     return elementarySectors.getAll()
     .then(function(elemSect) {
+      // Loop through initial list
       _.each(input, function(nonExSector) {
-        // Loop through initial list
         var children = [];
-        console.log('expanding ' + nonExSector.name);
+        // Loop through children
         _.each(nonExSector.children, function(c) {
           children.push(_expandSingle(c, input, elemSect));
         });
@@ -112,8 +134,15 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
           name: nonExSector.name,
           children: _.flatten(children)
         });
-        console.log('Expanded ' + nonExSector.name + ' to ' + _.flatten(children).toString());
       });
+      // Add elementary sectors
+      _.each(elemSect, function(e) {
+        expanded.push({
+          name: e,
+          children: [e]
+        });
+      });
+      console.log(expanded);
       return expanded;
     });
   }
@@ -154,7 +183,8 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
   }
 
   var service = {
-    getAll: getAll
+    getAll: getAll,
+    getFromString: getFromString
   };
 
   return service;
