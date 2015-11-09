@@ -5,7 +5,7 @@
     "angular": "^1.4.0",
     "angular-animate": "^1.4.0",
     "angular-cookies": "^1.4.0",
-    "angular-material": "~0.11.0",
+    "angular-material": "~1.0.0",
     "angular-messages": "^1.4.0",
     "angular-moment": "~0.9.2",
     "angular-nvd3": "~1.0.0",
