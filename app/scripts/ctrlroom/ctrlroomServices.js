@@ -227,14 +227,9 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, elementarySectors, tre
       var sectorString = '-';
       if(s.length !== 0) {
         var sct = _.find(allSectors, function(e) {
-          console.log(e);
           return _.isEqual(s.sort(), e.children.sort());
         });
-        if(sct === undefined) { // Elemental sector
-          sectorString = s.toString();
-        } else {
-          sectorString = sct.name;
-        }
+        sectorString = sct.name;
       }
       return sectorString;
     });
