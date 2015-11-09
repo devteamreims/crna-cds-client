@@ -106,6 +106,14 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             s.changed = false;
           }, 1000)
         );
+      } else if(positionId === 20) {
+        promises.push(
+          $timeout(function() {
+            var s = _.findWhere(positions, {id: positionId});
+            s.setSectors(['KD', 'KF', 'UF']);
+            s.changed = false;
+          }, 1000)
+        );
       } else {
         // Empty position
         promises.push(
@@ -128,8 +136,12 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     var self = this;
     if(sectors === undefined || sectors.length === 0) { // Input sanitation
       return false;
-    }
+    } 
 
+    // Handle single sector
+    if(!_.isArray(sectors)) {
+      sectors = [sectors];
+    }
 
     /* We need to find all positions with said sectors and remove them */
     _.each(sectors, function(s) { // Loop through given sectors
@@ -201,9 +213,10 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, crnaAtomicSectors, crn
     var sectorString = '-';
     if(s.length !== 0) {
       var sct = _.find(allSectors, function(e) {
+
         return _.isEqual(s.sort(), e.children.sort());
       });
-      if(sct === undefined) {
+      if(sct === undefined) { // Elemental sector
         sectorString = s.toString();
       } else {
         sectorString = sct.name;
