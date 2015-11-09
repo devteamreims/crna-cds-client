@@ -237,7 +237,7 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, elementarySectors, tre
         });
         if(sct === undefined) {
           // Grouping not found, fallback to elementary sectors with commas
-          sectorString = self.sectors.toString();
+          sectorString = s.toString();
         } else {
           sectorString = sct.name;
         }
