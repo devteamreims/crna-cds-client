@@ -75,7 +75,7 @@ function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdD
   vm.position = ctrlroomManager.getSingle($scope.position);
 
   vm.positionClass = function(position) {
-    if(ctrlroomManager.properties.isLoading === true) {
+    if(ctrlroomManager.properties.loading === true) {
       // No class when loading
       return '';
     }
