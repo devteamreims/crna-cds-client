@@ -69,7 +69,7 @@ function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdD
   vm.positionDisabled = true;
   vm.loading = true;
 
-  ctrlroomManager.refreshAll(); // This needs to be set somewhere else
+  ctrlroomManager.refreshAll(); // This needs to be set somewhere else : see ui-router
 
   vm.loading = false;
   vm.position = ctrlroomManager.getSingle($scope.position);
@@ -161,6 +161,7 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
   };
 
   vm.isDisabled = function(s) {
+    // Disable YR which is special
     return s === 'YR' || _.contains(vm.position.sectors, s);
   };
 
@@ -232,6 +233,9 @@ function ctrlroomConfirmPanelController(_, ctrlroomManager) {
 
   vm.cancel = function() {
     return ctrlroomManager.refreshAll();
-  }
+  };
 
+  vm.confirm = function() {
+    return ctrlroomManager.commitChanges();
+  };
 }

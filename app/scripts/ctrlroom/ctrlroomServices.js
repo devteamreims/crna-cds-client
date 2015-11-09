@@ -63,7 +63,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     var self = this;
     // Simulate async stuff
     var promises = [];
-    self.properties.loading = true;
+    properties.loading = true;
     _.each(crnaPositions, function(positionId) { /* Mock 3 open positions */
       positionId = parseInt(positionId);
       if(positionId === 31) {
@@ -135,8 +135,8 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     });
 
     return $q.all(promises).then(function() {
-      self.properties.loading = false;
-      self.properties.hasChanges = false;
+      properties.loading = false;
+      properties.hasChanges = false;
     });
   }
 
@@ -163,17 +163,23 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     newPosition.changed = true; // Activate changed flag
     newPosition.setSectors(_.union(newPosition.sectors, sectors)); // Bind to new position
 
-    self.properties.hasChanges = true;
+    properties.hasChanges = true;
     return true;
 
   }
 
   function commitChanges() {
+    var self = this;
     // Commit changes to backend
-    self.properties.loading = true;
-    return $timeout(function() {
-      self.properties.loading = false;
+    properties.loading = true;
+    var p = $timeout(function() {
+      _.each(positions, function(p) {
+        p.changed = false;
+      });
+      properties.hasChanges = false;
+      properties.loading = false;
     }, 3000);
+    return p;
   }
 
   var service = {
