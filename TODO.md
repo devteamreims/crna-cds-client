@@ -2,3 +2,6 @@
 * Add services/factories to give suggested sectors given current control room configuration
 * ~~Make fieldset clickable in dialog to select all underlying checkboxes~~
 * ~~Add a save method to ctrlroomManager~~ => commitChanges()
+* Add multiple tests :
+    * ctrlroomServices
+    * sectorServices
