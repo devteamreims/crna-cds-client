@@ -7,7 +7,7 @@
  * # ctrlroomDirectives
  * Directives for the control room management
  **/
-angular.module('ctrlroomDirectives', ['underscore', 'ctrlroomServices'])
+angular.module('ctrlroomDirectives', ['underscore', 'ctrlroomServices', 'sectorServices'])
 // Wrapper directive
 .directive('ctrlroomDashboard', ctrlroomDashboard)
 // Position button directive
@@ -123,8 +123,8 @@ function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdD
 
 }
 
-ctrlroomDialogController.$inject = ['_', '$scope', 'ctrlroomManager', 'position', '$mdDialog'];
-function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialog) {
+ctrlroomDialogController.$inject = ['_', '$scope', 'ctrlroomManager', 'position', '$mdDialog', 'treeSectors'];
+function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialog, treeSectors) {
   var vm = this;
   vm.position = position;
   vm.selectedSectors = [];
@@ -161,7 +161,20 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
   };
 
   vm.isDisabled = function(s) {
-    return _.contains(vm.position.sectors, s);
+    return s === 'YR' || _.contains(vm.position.sectors, s);
+  };
+
+  vm.toggleSectorsFromString = function(s) {
+    // Lookup string in treeSectors
+    console.log('Clicked on ' + s);
+    treeSectors.getFromString(s)
+    .then(function(sectors) {
+      console.log('Found sectors :');
+      console.log(sectors);
+      _.each(_.without(sectors, 'YR'), function(s) {
+        vm.toggleSector(s)
+      });
+    });
   };
 
   vm.toggleSector = function(s) {
@@ -183,7 +196,7 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
     vm.position.computeSectorString(_.union(vm.selectedSectors, vm.position.sectors))
     .then(function(str) {
       vm.newSectorString = str;
-    })
+    });
   };
 }
 

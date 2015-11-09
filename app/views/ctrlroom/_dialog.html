@@ -10,18 +10,18 @@
   </md-toolbar>
   <md-dialog-content layout="column">
     <div class="md-dialog-content">
-      <h2>{{vm.position.sectorString}} + {{vm.selectedSectors.toString() }} = {{vm.newSectorString}}</h2>
+      <h2>{{vm.position.sectorString}} =&gt; {{vm.newSectorString}}</h2>
       <div layout="column">
         <div class="URMN" layout="row">
           <div class="5R">
             <fieldset layout="column" class="5R">
-              <legend>5R</legend>
+              <legend ng-click="vm.toggleSectorsFromString('5R')">5R</legend>
               <md-checkbox ng-repeat="s in ['HR', 'YR', 'KR', 'XR', 'UR']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
           <div class="4N">
             <fieldset layout="column" class="4N">
-              <legend>4N</legend>
+              <legend ng-click="vm.toggleSectorsFromString('4N')">4N</legend>
               <md-checkbox ng-repeat="s in ['HN', 'KN', 'UB', 'UN']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
@@ -29,25 +29,25 @@
         <div class="URME" layout="row">
           <div class="4H">
             <fieldset layout="column" class="4H">
-              <legend>4H</legend>
+              <legend ng-click="vm.toggleSectorsFromString('4H')">4H</legend>
               <md-checkbox ng-repeat="s in ['HH', 'KH', 'XH', 'UH']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
           <div class="4E">
             <fieldset layout="column" class="4E">
-              <legend>4E</legend>
+              <legend ng-click="vm.toggleSectorsFromString('4E')">4E</legend>
               <md-checkbox ng-repeat="s in ['HE', 'KE', 'XE', 'UE']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
           <div class="KD2F">
             <fieldset layout="column" class="KD2F">
-              <legend>KD2F</legend>
+              <legend ng-click="vm.toggleSectorsFromString('KD2F')">KD2F</legend>
               <md-checkbox ng-repeat="s in ['KD', 'KF', 'UF']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
           <div class="FIR">
             <fieldset layout="column" class="FIR">
-              <legend>FIR</legend>
+              <legend ng-click="vm.toggleSectorsFromString('FIR')">FIR</legend>
               <md-checkbox ng-repeat="s in ['E', 'SE']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>

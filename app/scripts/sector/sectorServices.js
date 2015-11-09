@@ -93,7 +93,8 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
    * elementary sectors given a grouping name
    */
   function getFromString(str) {
-    var promise = getAll()
+    var self = this;
+    var promise = self.getAll()
     // getAll and expandAll
     .then(function(sectors) {
       // Find with string
@@ -142,7 +143,6 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
           children: [e]
         });
       });
-      console.log(expanded);
       return expanded;
     });
   }
@@ -177,8 +177,6 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
         return;
       }
     });
-    console.log('ret : ' + name);
-    console.log(ret);
     return ret;
   }
 
