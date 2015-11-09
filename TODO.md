@@ -5,3 +5,4 @@
 * Add multiple tests :
     * ctrlroomServices
     * sectorServices
+* ~~Disable ng-click when clicking on a disabled sector~~
