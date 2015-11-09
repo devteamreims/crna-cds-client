@@ -7,7 +7,7 @@
  * # ctrlroomServices
  * Services for the control room management
  **/
-angular.module('ctrlroomServices', ['4meCdsConstants', 'underscore'])
+angular.module('ctrlroomServices', ['4meCdsConstants', 'underscore', 'sectorServices'])
 .factory('ctrlroomPosition', ctrlroomPosition)
 .factory('ctrlroomManager', ctrlroomManager);
 
@@ -106,6 +106,14 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             s.changed = false;
           }, 1000)
         );
+      } else if(positionId === 23) {
+        promises.push(
+          $timeout(function() {
+            var s = _.findWhere(positions, {id: positionId});
+            s.setSectors(['E', 'SE']);
+            s.changed = false;
+          }, 1200)
+        );
       } else if(positionId === 20) {
         promises.push(
           $timeout(function() {
@@ -181,8 +189,8 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
 }
 
 /* Single position factory */
-ctrlroomPosition.$inject = ['_', '$q', '$timeout', 'crnaPositions', 'crnaAtomicSectors', 'crnaSectors'];
-function ctrlroomPosition(_, $q, $timeout, crnaPositions, crnaAtomicSectors, crnaSectors) {
+ctrlroomPosition.$inject = ['_', '$q', '$timeout', 'crnaPositions', 'elementarySectors', 'treeSectors'];
+function ctrlroomPosition(_, $q, $timeout, crnaPositions, elementarySectors, treeSectors) {
 
   var ctrlroomPosition = function(positionId) {
     this.id = positionId;
@@ -196,11 +204,18 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, crnaAtomicSectors, crn
   ctrlroomPosition.prototype.setSectors = function(sectors) {
     var self = this;
     self.sectors = sectors;
-    self.sectorString = self.computeSectorString();
+    // Async compute string
+    self.computeSectorString().then(function(str) {
+      self.sectorString = str;
+    });
 
     return self;
   };
 
+  /*
+   * computeSectorString (async)
+   * returns a promise computing sector string
+   */
   ctrlroomPosition.prototype.computeSectorString = function(sectors) {
     var self = this;
     var s = sectors;
@@ -208,26 +223,28 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, crnaAtomicSectors, crn
       s = self.sectors;
     }
 
-    var allSectors = crnaSectors;
-    // compute sectorString once and for all
-    var sectorString = '-';
-    if(s.length !== 0) {
-      var sct = _.find(allSectors, function(e) {
-
-        return _.isEqual(s.sort(), e.children.sort());
-      });
-      if(sct === undefined) { // Elemental sector
-        sectorString = s.toString();
-      } else {
-        sectorString = sct.name;
+    return treeSectors.getAll().then(function(allSectors) {
+      var sectorString = '-';
+      if(s.length !== 0) {
+        var sct = _.find(allSectors, function(e) {
+          console.log(e);
+          return _.isEqual(s.sort(), e.children.sort());
+        });
+        if(sct === undefined) { // Elemental sector
+          sectorString = s.toString();
+        } else {
+          sectorString = sct.name;
+        }
       }
-    }
-    return sectorString;
+      return sectorString;
+    });
+
   };
 
   ctrlroomPosition.prototype.getSuggestedSectors = function() {
     var self = this;
-    return _.difference(crnaAtomicSectors, self.sectors);
+    // TODO : put this in a service
+    return _.difference(elementarySectors.getAll(), self.sectors);
   };
 
   return {

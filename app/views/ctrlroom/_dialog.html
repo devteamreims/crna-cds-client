@@ -41,8 +41,14 @@
           </div>
           <div class="KD2F">
             <fieldset layout="column" class="KD2F">
-              <legend>4E</legend>
+              <legend>KD2F</legend>
               <md-checkbox ng-repeat="s in ['KD', 'KF', 'UF']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
+            </fieldset>
+          </div>
+          <div class="FIR">
+            <fieldset layout="column" class="FIR">
+              <legend>FIR</legend>
+              <md-checkbox ng-repeat="s in ['E', 'SE']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
         </div>

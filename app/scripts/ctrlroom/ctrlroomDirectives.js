@@ -28,6 +28,10 @@ ctrlroomDashboardController.$inject = ['ctrlroomManager'];
 function ctrlroomDashboardController(ctrlroomManager) {
   var vm = this;
   vm.hasChanges = function() {
+    if(ctrlroomManager.properties.isLoading === true) {
+      // No changes when loading
+      return false;
+    }
     if(ctrlroomManager.properties.hasChanges === true) {
       return true;
     } else {
@@ -71,6 +75,10 @@ function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdD
   vm.position = ctrlroomManager.getSingle($scope.position);
 
   vm.positionClass = function(position) {
+    if(ctrlroomManager.properties.isLoading === true) {
+      // No class when loading
+      return '';
+    }
     if(position.disabled === true) {
       return '';
     } else {
@@ -172,7 +180,10 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
       }
     }
     // Recompute newSectorString
-    vm.newSectorString = vm.position.computeSectorString(_.union(vm.selectedSectors, vm.position.sectors));
+    vm.position.computeSectorString(_.union(vm.selectedSectors, vm.position.sectors))
+    .then(function(str) {
+      vm.newSectorString = str;
+    })
   };
 }
 
