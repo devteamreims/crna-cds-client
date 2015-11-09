@@ -94,9 +94,17 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
         promises.push(
           $timeout(function() {
             var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['UH', 'XH']);
+            s.setSectors(['UH', 'XH', 'KH', 'HH']);
             s.changed = false;
           }, 1500)
+        );
+      } else if(positionId === 25) {
+        promises.push(
+          $timeout(function() {
+            var s = _.findWhere(positions, {id: positionId});
+            s.setSectors(['UE', 'XE', 'KE', 'HE']);
+            s.changed = false;
+          }, 1000)
         );
       } else {
         // Empty position

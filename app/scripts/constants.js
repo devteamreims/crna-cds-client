@@ -28,7 +28,9 @@ angular.module('4meCdsConstants', [])
     { name: '4N',     children: ['UB', 'UN', 'KN', 'HN'] },
     { name: 'URMN',   children: ['5R', '4N'] },
     { name: '2F',     children: ['KF', 'UF'] },
-    { name: 'KD2F',   children: ['2F', 'KD'] }
+    { name: 'KD2F',   children: ['2F', 'KD'] },
+    { name: '4E',     children: ['UE', 'XE', 'KE', 'HE']},
+    { name: '4H',     children: ['UH', 'XH', 'KH', 'HH']},    
 ])
 .constant('crnaPositions', [
     '30', '31', '32', '33', // 4R
