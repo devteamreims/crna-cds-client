@@ -14,13 +14,13 @@
       <div layout="column">
         <div class="URMN" layout="row">
           <div class="5R">
-            <fieldset class="5R">
+            <fieldset layout="column" class="5R">
               <legend>5R</legend>
               <md-checkbox ng-repeat="s in ['HR', 'YR', 'KR', 'XR', 'UR']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
           <div class="4N">
-            <fieldset class="4N">
+            <fieldset layout="column" class="4N">
               <legend>4N</legend>
               <md-checkbox ng-repeat="s in ['HN', 'KN', 'UB', 'UN']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
@@ -28,15 +28,21 @@
         </div>
         <div class="URME" layout="row">
           <div class="4H">
-            <fieldset class="4H">
+            <fieldset layout="column" class="4H">
               <legend>4H</legend>
               <md-checkbox ng-repeat="s in ['HH', 'KH', 'XH', 'UH']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
           <div class="4E">
-            <fieldset class="4E">
+            <fieldset layout="column" class="4E">
               <legend>4E</legend>
               <md-checkbox ng-repeat="s in ['HE', 'KE', 'XE', 'UE']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
+            </fieldset>
+          </div>
+          <div class="KD2F">
+            <fieldset layout="column" class="KD2F">
+              <legend>4E</legend>
+              <md-checkbox ng-repeat="s in ['KD', 'KF', 'UF']" ng-checked="vm.isChecked(s)" ng-disabled="vm.isDisabled(s)" ng-click="vm.toggleSector(s)">{{s}}</md-checkbox>
             </fieldset>
           </div>
         </div>
