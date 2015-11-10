@@ -8,3 +8,4 @@
 * ~~Disable ng-click when clicking on a disabled sector~~
 * ~~Fix main layout height~~
 * Rework save/cancel buttons (add a timer ?)
+* Migrate to Gulp and rewrite build process
