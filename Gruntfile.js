@@ -18,7 +18,7 @@ module.exports = function (grunt) {
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
-    dist: '../crna-server/dist/cds'
+    dist: '../crna-cds-backend/frontend'
   };
 
   grunt.loadNpmTasks('grunt-webfont');
