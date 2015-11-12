@@ -6,17 +6,8 @@
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(.) styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
-    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
-    <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css" />
-    <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.min.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
+    <link rel="stylesheet" href="styles/vendor.css" />
+    <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body layout="column" layout-fill ng-app="4meCdsApp">
     <md-toolbar layout="row" layout-padding>
@@ -32,49 +23,7 @@
     </md-toolbar>
     <md-content layout="column" ui-view flex></md-content>
     </body>
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.js"></script>
-    <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/angular-messages/angular-messages.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/angular-moment/angular-moment.js"></script>
-    <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/nvd3/build/nv.d3.js"></script>
-    <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-smart-table/dist/smart-table.js"></script>
-    <script src="bower_components/angular-socket-io/socket.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-    <script src="socket.io/socket.io.js"></script>
-
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
-
-    <script src="scripts/common.js"></script>
-
-    <script src="scripts/config.js"></script>
-
-    <script src="scripts/io.js"></script>
-    <script src="scripts/underscore.js"></script>
-    <script src="scripts/routes.js"></script>
-    <script src="scripts/constants.js"></script>
-
-    <script src="scripts/ctrlroom/ctrlroom.js"></script>
-    <script src="scripts/ctrlroom/ctrlroomControllers.js"></script>
-    <script src="scripts/ctrlroom/ctrlroomDirectives.js"></script>
-    <script src="scripts/ctrlroom/ctrlroomServices.js"></script>
-
-    <script src="scripts/sector/sector.js"></script>
-    <script src="scripts/sector/sectorServices.js"></script>
-    <!-- endbuild -->
+    <script src="scripts/vendor.js"></script>
+    <script src="scripts/bundle.js"></script>
+    <script src="scripts/templateCachePartials.js"></script>
 </html>

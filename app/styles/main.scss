@@ -1,5 +1,3 @@
-@import "googlefonts";
-
 // Import mdi stuff
 @import "mdi/scss/_variables.scss";
 @import "mdi/scss/_icons.scss";
@@ -12,7 +10,11 @@
 @import "bourbon/app/assets/stylesheets/_bourbon.scss";
 @import "mdi/scss/_core.scss";
 @import "mdi/scss/materialdesignicons.scss";
+@import "compass-mixins/lib/_compass.scss";
 // endbower
+
+// Google fonts
+@import "googlefonts";
 
 // Import material colors
 @import "modules/common/modules.common.materialcolors";

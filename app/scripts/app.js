@@ -19,7 +19,8 @@ angular
     'ngMaterial',
     'ctrlroom', // Control room management module
     '4meCdsRoutes', // Angular-ui-router routes
-    '4meCdsConstants' // Constants
+    '4meCdsConstants', // Constants
+    '4meCdsPartials' // Template cache
 //    'position', // Position module
 //    'commonControllers' // Controllers communs
 ]);
