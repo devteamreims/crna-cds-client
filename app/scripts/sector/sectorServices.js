@@ -75,7 +75,7 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
         }, 500).then(function(sectors) {
           self.sectors = _expandAll(sectors);
           return self.sectors;
-        })
+        });
 
       return self.loadingPromise;
 
@@ -91,7 +91,8 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
    * getFromString() (async)
    * returns a promise of expanded list of
    * elementary sectors given a grouping name
-   */
+   *
+  **/
   function getFromString(str) {
     var self = this;
     var promise = self.getAll()
