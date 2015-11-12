@@ -51,6 +51,8 @@
     "validthis": false,
     "noyield": false,
 
+    "validthis": true,
+
     "browser": true,
     "node": true,
 
