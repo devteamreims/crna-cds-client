@@ -72,7 +72,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UR', 'XR']);
             s.changed = false;
-          }, 1000)
+          }, 200)
         );
       } else if(positionId === 32) {
         promises.push(
@@ -80,7 +80,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['KR', 'YR', 'HR']);
             s.changed = false;
-          }, 2000)
+          }, 400)
         );
       } else if(positionId === 36) {
         promises.push(
@@ -88,7 +88,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UN', 'UB', 'KN', 'HN']);
             s.changed = false;
-          }, 2500)
+          }, 800)
         );
       } else if(positionId === 21) {
         promises.push(
@@ -96,7 +96,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UH', 'XH', 'KH', 'HH']);
             s.changed = false;
-          }, 1500)
+          }, 400)
         );
       } else if(positionId === 25) {
         promises.push(
@@ -104,7 +104,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['UE', 'XE', 'KE', 'HE']);
             s.changed = false;
-          }, 1000)
+          }, 800)
         );
       } else if(positionId === 23) {
         promises.push(
@@ -120,7 +120,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors(['KD', 'KF', 'UF']);
             s.changed = false;
-          }, 1000)
+          }, 600)
         );
       } else {
         // Empty position
@@ -129,7 +129,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
             var s = _.findWhere(positions, {id: positionId});
             s.setSectors([]);
             s.changed = false;
-          }, 100)
+          }, 10)
         );
       }
     });
@@ -178,7 +178,7 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
       });
       properties.hasChanges = false;
       properties.loading = false;
-    }, 3000);
+    }, 1500);
     return p;
   }
 

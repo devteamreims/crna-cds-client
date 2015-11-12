@@ -72,7 +72,7 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
         $timeout(function() {
           sectors = angular.copy(crnaSectors);
           return sectors;
-        }, 1000).then(function(sectors) {
+        }, 500).then(function(sectors) {
           self.sectors = _expandAll(sectors);
           return self.sectors;
         })
