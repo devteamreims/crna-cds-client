@@ -10,8 +10,26 @@
 
  angular.module('sectorDirectives', ['underscore', 'ctrlroomServices', 'sectorServices'])
 // Sector suggestion directive
-.directive('sectorSuggest', sectorSuggest);
+.directive('sectorSuggest', sectorSuggest)
+.directive('urmeSectors', urmeSectors)
+.directive('urmnSectors', urmnSectors);
 
+// URMN sectors
+function urmnSectors() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/sector/_urmn.html'
+  }
+}
+
+function urmeSectors() {
+  return {
+    restrict: 'E',
+    templateUrl: 'views/sector/_urme.html'
+  }
+}
+
+// Sector suggestions directive
 function sectorSuggest() {
   return {
     restrict: 'E',
