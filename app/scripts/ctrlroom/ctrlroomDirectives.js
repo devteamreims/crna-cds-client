@@ -167,20 +167,28 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
 
   vm.addSectorsFromString = function(s) {
     console.log('Adding sectors ' + s);
+    // Get sectors from string
     treeSectors.getFromString(s)
+    // Filter and assign to selectedSectors
     .then(function(sectors) {
       var filtered = _.without(sectors, 'YR');
       vm.selectedSectors = _.union(vm.selectedSectors, filtered);
+      return vm.selectedSectors;
+    })
+    // Recompute sector string
+    .then(function(selectedSectors) {
+      return vm.position.computeSectorString(_.union(selectedSectors, vm.position.sectors));
+    })
+    // Assign to vm.newSectorString
+    .then(function(str) {
+      vm.newSectorString = str;
     });
   };
 
   vm.toggleSectorsFromString = function(s) {
     // Lookup string in treeSectors
-    console.log('Clicked on ' + s);
     treeSectors.getFromString(s)
     .then(function(sectors) {
-      console.log('Found sectors :');
-      console.log(sectors);
       _.each(_.without(sectors, 'YR'), function(s) {
         vm.toggleSector(s)
       });
