@@ -191,8 +191,8 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
 }
 
 
-suggestedSectors.$inject = ['_', '$q', '$timeout'];
-function suggestedSectors(_, $q, $timeout) {
+suggestedSectors.$inject = ['_', '$q', '$timeout', 'ctrlroomManager', 'suggestedSectorsEmptyPosition', 'suggestedSectorAdditions'];
+function suggestedSectors(_, $q, $timeout, ctrlroomManager, suggestedSectorsEmptyPosition, suggestedSectorAdditions) {
   var service = {
     fromPositionId: fromPositionId
   };
@@ -206,12 +206,17 @@ function suggestedSectors(_, $q, $timeout) {
 
   function fromPositionId(positionId) {
     var self = this;
-    console.log('Getting suggested sectors for position : ' + positionId);
-
+    var position = ctrlroomManager.getSingle(positionId);
+    var ret = [];
+    if(_.isEmpty(position.sectors)) { // We have an empty position
+      ret = suggestedSectorsEmptyPosition[position.id];
+    } else {
+      ret = suggestedSectorAdditions[position.sectorString];
+    }
     // Mock http get request
     return $timeout(function() {
-      return ['UXH', 'KHH'];
-    }, 3000);
+      return ret;
+    }, 500);
   }
 
   return service;

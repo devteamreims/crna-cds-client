@@ -34,6 +34,8 @@ angular.module('4meCdsConstants', [])
     { name: 'UXH',    children: ['UH', 'XH']},
     { name: 'KHH',    children: ['KH', 'HH']},
     { name: 'UXE',    children: ['UE', 'XE']},
+    { name: 'UXKE',   children: ['UXE', 'KE']},
+    { name: 'XKHE',   children: ['XE', 'KHE']},
     { name: 'KHE',    children: ['KE', 'HE']},
     { name: 'FIR',    children: ['E', 'SE']},
     { name: '5H',     children: ['4H', 'SE']},
@@ -49,4 +51,23 @@ angular.module('4meCdsConstants', [])
     '20', '21', '22', '23', // KD + 4H + FIR
     '24', '25', '26', '27', // 4E + 2F
     '11', '12', '13', '14'  // FIR + KF + Nuit
-]);
+])
+// Sectors splitting suggestions
+.constant('suggestedSectorsEmptyPosition', {
+    '20': ['KD', '2F', 'KD2F'],
+    '21': ['4H', 'UXH', 'KHH', 'KH', 'HH', '5H'],
+    '22': ['4H', 'UXH', 'KHH', 'KH', 'HH', '5H'],
+    '23': ['FIR', 'E', 'SE'],
+    '24': ['KF', '2F', 'UE', 'UXE'],
+    '25': ['4E', 'UXE', 'KHE', 'HE'],
+    '26': ['4E', 'UXE', 'KHE', 'HE'],
+    '27': ['2F', 'KD']
+})
+.constant('suggestedSectorAdditions', {
+    '4H': ['4E', 'SE'],
+    '4E': ['4H', 'E'],
+    '4EH': ['FIR', 'KD2F'],
+    '5EH': ['KD2F'],
+    'FIR': ['4EH'],
+    'UXE': ['KE', 'KHE']
+});
