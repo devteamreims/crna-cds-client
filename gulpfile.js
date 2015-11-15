@@ -16,9 +16,11 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     mainBowerFiles = require('main-bower-files'),
     wiredep = require('wiredep').stream,
-    ngAnnotate = require('browserify-ngannotate');
+    ngAnnotate = require('browserify-ngannotate'),
+    runSequence = require('run-sequence'),
+    connect = require('gulp-connect'),
+    CacheBuster = require('gulp-cachebust');
 
-var CacheBuster = require('gulp-cachebust');
 var cachebust = new CacheBuster();
 
 var config = {
@@ -66,7 +68,7 @@ gulp.task('install-bower', function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-css', ['clean'], function() {
+gulp.task('build-css', function() {
     return gulp.src(config.sassFolder)
         .pipe(sourcemaps.init())
         .pipe(sass({
@@ -78,7 +80,8 @@ gulp.task('build-css', ['clean'], function() {
         }))
         .pipe(cachebust.resources())
         .pipe(sourcemaps.write(config.mapsFolder))
-        .pipe(gulp.dest(config.destFolder + '/styles/'));
+        .pipe(gulp.dest(config.destFolder + '/styles/'))
+        .pipe(connect.reload());
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -87,7 +90,7 @@ gulp.task('build-css', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-bower-css', ['clean'], function() {
+gulp.task('build-bower-css', function() {
     return gulp.src(mainBowerFiles({
         filter: /.*s?(c|a)ss$/
     }))
@@ -102,7 +105,8 @@ gulp.task('build-bower-css', ['clean'], function() {
         .pipe(concat('vendor.css'))
         .pipe(cachebust.resources())
         .pipe(sourcemaps.write(config.mapsFolder))
-        .pipe(gulp.dest(config.destFolder + '/styles/'));
+        .pipe(gulp.dest(config.destFolder + '/styles/'))
+        .pipe(connect.reload());
 });
 
 
@@ -114,7 +118,7 @@ gulp.task('build-bower-css', ['clean'], function() {
 
 gulp.task('jshint', function() {
     gulp.src(config.jsFolder)
-        .pipe(debug())
+        //.pipe(debug())
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
@@ -126,7 +130,7 @@ gulp.task('jshint', function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-template-cache', ['clean'], function() {
+gulp.task('build-template-cache', function() {
 
     var ngHtml2Js = require("gulp-ng-html2js"),
         concat = require("gulp-concat");
@@ -138,7 +142,8 @@ gulp.task('build-template-cache', ['clean'], function() {
         }))
         .pipe(concat("templateCachePartials.js"))
         .pipe(cachebust.resources())
-        .pipe(gulp.dest(config.destFolder + '/scripts/'));
+        .pipe(gulp.dest(config.destFolder + '/scripts/'))
+        .pipe(connect.reload());
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +153,7 @@ gulp.task('build-template-cache', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-js', ['clean'], function() {
+gulp.task('build-js', function() {
 
     return gulp.src(config.jsFolder)
         .pipe(concat('bundle.js'))
@@ -170,7 +175,8 @@ gulp.task('build-js', ['clean'], function() {
         .pipe(uglify())
         .on('error', gutil.log)
         .pipe(sourcemaps.write(config.mapsFolder))
-        .pipe(gulp.dest(config.destFolder + '/scripts/'));
+        .pipe(gulp.dest(config.destFolder + '/scripts/'))
+        .pipe(connect.reload());
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -179,14 +185,15 @@ gulp.task('build-js', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-bower-js', ['clean'], function() {
+gulp.task('build-bower-js', function() {
     return gulp.src(mainBowerFiles({
         filter: /.*\.js$/
     }))
-        .pipe(debug())
+        //.pipe(debug())
         .pipe(concat('vendor.js'))
         .pipe(cachebust.resources())
-        .pipe(gulp.dest(config.destFolder + '/scripts/'));
+        .pipe(gulp.dest(config.destFolder + '/scripts/'))
+        .pipe(connect.reload());
 });
 
 
@@ -196,12 +203,51 @@ gulp.task('build-bower-js', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-bower-fonts', ['clean'], function() {
+gulp.task('build-bower-fonts', function() {
     return gulp.src(mainBowerFiles({
         filter: /.*\.(woff2|eot|woff|ttf|svg)$/
     }))
         .pipe(debug())
-        .pipe(gulp.dest(config.destFolder + '/fonts/'));
+        .pipe(gulp.dest(config.destFolder + '/fonts/'))
+        .pipe(connect.reload());
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Build index.html
+//
+/////////////////////////////////////////////////////////////////////////////////////
+
+gulp.task('build-index', function() {
+    return gulp.src('app/index.html')
+        .pipe(cachebust.references())
+        .pipe(gulp.dest('dist'))
+        .pipe(connect.reload());
+});
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Watch and rebuild
+//
+/////////////////////////////////////////////////////////////////////////////////////
+gulp.task('watch', function() {
+    gulp.watch(config.sassFolder, ['build']);
+    gulp.watch(config.jsFolder, ['build']);
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Serve (and watch)
+//
+/////////////////////////////////////////////////////////////////////////////////////
+gulp.task('serve', ['watch'], function() {
+    connect.server({
+        root: config.destFolder,
+        livereload: true,
+        port: 4000
+    });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -210,8 +256,15 @@ gulp.task('build-bower-fonts', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build', [ 'clean', 'install-bower', 'build-css', 'build-bower-css', 'build-bower-fonts', 'build-template-cache', 'jshint', 'build-js', 'build-bower-js'], function() {
-    return gulp.src('app/index.html')
-        .pipe(cachebust.references())
-        .pipe(gulp.dest('dist'));
+gulp.task('build', function(cb) {
+    return runSequence('clean',
+        'install-bower',
+        [
+            'build-css', 'build-bower-css',
+            'build-bower-fonts',
+            'build-template-cache', 'jshint',
+            'build-js', 'build-bower-js'
+        ],
+        'build-index',
+        cb);
 });
