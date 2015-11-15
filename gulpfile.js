@@ -23,6 +23,7 @@ var gulp = require('gulp'),
 var cachebust = new CacheBuster();
 
 var config = {
+    appFolder:      'app/**/*', 
     sassFolder:     'app/styles/**/*',
     jsFolder:       'app/scripts/**/*',
     viewsFolder:    'app/views/**/*',
@@ -139,6 +140,7 @@ gulp.task('build-template-cache', function() {
             moduleName: "4meCdsPartials",
             prefix: "views/"
         }))
+        //.pipe(debug())
         .pipe(concat("templateCachePartials.js"))
         .pipe(cachebust.resources())
         .pipe(gulp.dest(config.destFolder + '/scripts/'))
@@ -231,8 +233,7 @@ gulp.task('build-index', function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 gulp.task('watch', function() {
-    gulp.watch(config.sassFolder, ['build']);
-    gulp.watch(config.jsFolder, ['build']);
+    gulp.watch(config.appFolder, ['build']);
 });
 
 
