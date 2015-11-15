@@ -10,7 +10,6 @@ var gulp = require('gulp'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     buffer = require('vinyl-buffer'),
-    debowerify = require('debowerify'),
     uglify = require('gulp-uglify'),
     gutil = require('gulp-util'),
     concat = require('gulp-concat'),
@@ -242,7 +241,7 @@ gulp.task('watch', function() {
 // Serve (and watch)
 //
 /////////////////////////////////////////////////////////////////////////////////////
-gulp.task('serve', ['watch'], function() {
+gulp.task('serve', ['build', 'watch'], function() {
     connect.server({
         root: config.destFolder,
         livereload: true,
