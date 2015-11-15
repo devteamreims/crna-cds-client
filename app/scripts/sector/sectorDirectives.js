@@ -64,11 +64,17 @@ function sectorSuggestController(_, $scope, $timeout, suggestedSectors) {
    * Click on suggestion button : add sectors then confirm
    */
   suggestVm.confirmSuggestion = function(s) {
-    return 
-      parentVm.addSectorsFromString(s)
-      .then(function() {
-        return parentVm.confirm();
-      });
-  };  
+    parentVm.addSectorsFromString(s)
+    .then(function() {
+      return parentVm.confirm();
+    });
+  };
+
+  /*
+   * If this position already has bound sectors, show a + sign
+   */
+  suggestVm.showPlus = function() {
+    return _.isEmpty(parentVm.position.sectors);
+  };
 
 }
