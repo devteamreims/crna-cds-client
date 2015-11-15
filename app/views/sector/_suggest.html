@@ -1,0 +1,6 @@
+<h4 class="md-title">Suggestions</h4>
+<md-progress-linear ng-show="suggestVm.loading" class="md-warn" md-mode="indeterminate" md-diameter="20"></md-progress-linear>
+<div layout="row">
+<md-button class="md-raised" ng-repeat="s in suggestVm.suggestedSectors track by $index" ng-click="vm.addSectorsFromString(s)">{{s}}</md-button>
+</div>
+<md-divider></md-divider>

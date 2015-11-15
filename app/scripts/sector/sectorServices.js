@@ -9,7 +9,8 @@
  **/
 angular.module('sectorServices', ['4meCdsConstants', 'underscore'])
 .factory('elementarySectors', elementarySectors)
-.factory('treeSectors', treeSectors);
+.factory('treeSectors', treeSectors)
+.factory('suggestedSectors', suggestedSectors);
 
 // Atomic / elementary sectors
 elementarySectors.$inject = ['_', '$q', '$timeout', 'crnaAtomicSectors'];
@@ -188,3 +189,31 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
 
   return service;
 }
+
+
+suggestedSectors.$inject = ['_', '$q', '$timeout'];
+function suggestedSectors(_, $q, $timeout) {
+  var service = {
+    fromPositionId: fromPositionId
+  };
+
+  /*
+   * fromPositionId(positionId) (async)
+   * returns a promise of an array of strings
+   * suggesting groupings given a position number
+   *
+  **/
+
+  function fromPositionId(positionId) {
+    var self = this;
+    console.log('Getting suggested sectors for position : ' + positionId);
+
+    return $timeout(function() {
+      return ['UXH', 'KHH'];
+    }, 3000);
+  }
+
+  return service;
+
+}
+

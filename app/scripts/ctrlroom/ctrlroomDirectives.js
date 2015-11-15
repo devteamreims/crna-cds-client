@@ -165,6 +165,15 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
     return s === 'YR' || _.contains(vm.position.sectors, s);
   };
 
+  vm.addSectorsFromString = function(s) {
+    console.log('Adding sectors ' + s);
+    treeSectors.getFromString(s)
+    .then(function(sectors) {
+      var filtered = _.without(sectors, 'YR');
+      vm.selectedSectors = _.union(vm.selectedSectors, filtered);
+    });
+  };
+
   vm.toggleSectorsFromString = function(s) {
     // Lookup string in treeSectors
     console.log('Clicked on ' + s);

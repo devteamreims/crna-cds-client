@@ -7,4 +7,4 @@
  * # sectors module
  * Meta module to include sectors components
  */
-angular.module('sector', ['sectorServices']);
+angular.module('sector', ['sectorServices', 'sectorDirectives']);

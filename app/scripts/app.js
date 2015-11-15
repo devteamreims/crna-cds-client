@@ -18,6 +18,7 @@ angular
     'btford.socket-io',
     'ngMaterial',
     'ctrlroom', // Control room management module
+    'sector', // Sectors module
     '4meCdsRoutes', // Angular-ui-router routes
     '4meCdsConstants', // Constants
     '4meCdsPartials' // Template cache
