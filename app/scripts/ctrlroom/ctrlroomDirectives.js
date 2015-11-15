@@ -140,7 +140,6 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
   };
 
   vm.isLoading = function() {
-    console.log('isLoading called !')
     if(ctrlroomManager.properties.loading === true) {
       return true;
     } else {
@@ -166,9 +165,8 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
   };
 
   vm.addSectorsFromString = function(s) {
-    console.log('Adding sectors ' + s);
     // Get sectors from string
-    treeSectors.getFromString(s)
+    return treeSectors.getFromString(s)
     // Filter and assign to selectedSectors
     .then(function(sectors) {
       var filtered = _.without(sectors, 'YR');
@@ -187,7 +185,7 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
 
   vm.toggleSectorsFromString = function(s) {
     // Lookup string in treeSectors
-    treeSectors.getFromString(s)
+    return treeSectors.getFromString(s)
     .then(function(sectors) {
       _.each(_.without(sectors, 'YR'), function(s) {
         vm.toggleSector(s)

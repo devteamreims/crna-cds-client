@@ -19,14 +19,14 @@ function urmnSectors() {
   return {
     restrict: 'E',
     templateUrl: 'views/sector/_urmn.html'
-  }
+  };
 }
 
 function urmeSectors() {
   return {
     restrict: 'E',
     templateUrl: 'views/sector/_urme.html'
-  }
+  };
 }
 
 // Sector suggestions directive
@@ -46,16 +46,29 @@ function sectorSuggestController(_, $scope, $timeout, suggestedSectors) {
   suggestVm.suggestedSectors = [];
   suggestVm.loading = true;
 
+  var parentVm = $scope.vm;
+
   /*
    * Quick note about scopes
    * This directive doesn't have an isolated scope
    * We use $scope.vm to get back to our parent's scope ($mdDialog scope)
    * In our dialog, we use 'vm' as a view model, hence the correct path : $scope.vm.position.id
   **/
-  suggestedSectors.fromPositionId($scope.vm.position.id)
+  suggestedSectors.fromPositionId(parentVm.position.id)
   .then(function(sectors) {
     suggestVm.loading = false;
     suggestVm.suggestedSectors = sectors;
   });
+
+  /*
+   * Click on suggestion button : add sectors then confirm
+   */
+  suggestVm.confirmSuggestion = function(s) {
+    return 
+      parentVm.addSectorsFromString(s)
+      .then(function() {
+        return parentVm.confirm();
+      });
+  };  
 
 }

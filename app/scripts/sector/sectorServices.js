@@ -208,6 +208,7 @@ function suggestedSectors(_, $q, $timeout) {
     var self = this;
     console.log('Getting suggested sectors for position : ' + positionId);
 
+    // Mock http get request
     return $timeout(function() {
       return ['UXH', 'KHH'];
     }, 3000);
