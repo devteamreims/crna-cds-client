@@ -74,7 +74,7 @@ function sectorSuggestController(_, $scope, $timeout, suggestedSectors) {
    * If this position already has bound sectors, show a + sign
    */
   suggestVm.showPlus = function() {
-    return _.isEmpty(parentVm.position.sectors);
+    return !_.isEmpty(parentVm.position.sectors);
   };
 
 }
