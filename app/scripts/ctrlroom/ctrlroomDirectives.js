@@ -164,13 +164,13 @@ function ctrlroomDialogController(_, $scope, ctrlroomManager, position, $mdDialo
     return s === 'YR' || _.contains(vm.position.sectors, s);
   };
 
-  vm.addSectorsFromString = function(s) {
+  vm.setSectorsFromString = function(s) {
     // Get sectors from string
     return treeSectors.getFromString(s)
     // Filter and assign to selectedSectors
     .then(function(sectors) {
       var filtered = _.without(sectors, 'YR');
-      vm.selectedSectors = _.union(vm.selectedSectors, filtered);
+      vm.selectedSectors = filtered;
       return vm.selectedSectors;
     })
     // Recompute sector string
