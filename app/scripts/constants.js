@@ -64,10 +64,10 @@ angular.module('4meCdsConstants', [])
     '27': ['2F', 'KD']
 })
 .constant('suggestedSectorAdditions', {
-    '4H': ['4E', 'SE'],
-    '4E': ['4H', 'E'],
-    '4EH': ['FIR', 'KD2F'],
-    '5EH': ['KD2F'],
-    'FIR': ['4EH'],
-    'UXE': ['KE', 'KHE']
+    '4H': ['4EH', '5H'],
+    '4E': ['4EH', '5E'],
+    '4EH': ['5EH', 'KDFE'],
+    '5EH': ['KDFE'],
+    'FIR': ['5EH'],
+    'UXE': ['UXKE', '4E']
 });

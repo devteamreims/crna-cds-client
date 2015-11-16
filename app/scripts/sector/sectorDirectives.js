@@ -35,7 +35,7 @@ function sectorSuggest() {
     restrict: 'E',
     templateUrl: 'views/sector/_suggest.html',
     controller: sectorSuggestController,
-    controllerAs: 'suggestVm',
+    controllerAs: 'suggestVm'
   }; 
 }
 
@@ -61,10 +61,10 @@ function sectorSuggestController(_, $scope, $timeout, suggestedSectors) {
   });
 
   /*
-   * Click on suggestion button : add sectors then confirm
+   * Click on suggestion button : set sectors then confirm
    */
   suggestVm.confirmSuggestion = function(s) {
-    parentVm.addSectorsFromString(s)
+    parentVm.setSectorsFromString(s)
     .then(function() {
       return parentVm.confirm();
     });
