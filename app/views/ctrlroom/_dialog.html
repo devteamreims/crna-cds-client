@@ -1,4 +1,4 @@
-<md-dialog layout="column" flex="80" ng-cloak>
+<md-dialog layout="column" flex="70" ng-cloak>
   <md-toolbar>
     <div class="md-toolbar-tools">
       <h2>Position {{vm.position.id}} {{vm.position.sectorString}} =&gt; {{vm.newSectorString}}</h2>
@@ -8,14 +8,15 @@
       </md-button>
     </div>
   </md-toolbar>
-  <sector-suggest layout="column"></sector-suggest>
   <md-dialog-content layout="column">
-    <div class="md-dialog-content">
-      <div layout="column">
-        <urmn-sectors></urmn-sectors>
-        <urme-sectors></urme-sectors>
-      </div>
-    </div>
+  <div class="md-dialog-content" layout="column">
+    <sector-suggest></sector-suggest>
+  </div>
+    <md-divider></md-divider>
+  <div class="md-dialog-content" layout="column">
+    <urmn-sectors></urmn-sectors>
+    <urme-sectors></urme-sectors>
+  </div>
   </md-dialog-content>
   <md-dialog-actions>
     <span flex></span>
