@@ -18,7 +18,8 @@ var gulp = require('gulp'),
     ngAnnotate = require('browserify-ngannotate'),
     runSequence = require('run-sequence'),
     connect = require('gulp-connect'),
-    CacheBuster = require('gulp-cachebust');
+    CacheBuster = require('gulp-cachebust'),
+    karma = require('karma').server;
 
 var cachebust = new CacheBuster();
 
@@ -27,6 +28,7 @@ var config = {
     sassFolder:     'app/styles/**/*',
     jsFolder:       'app/scripts/**/*',
     viewsFolder:    'app/views/**/*',
+    testFolder:     'test/**/*',
     fontsFolder:    'fonts',
     destFolder:     'dist',
     mapsFolder:     'maps',
@@ -248,6 +250,19 @@ gulp.task('serve', ['build', 'watch'], function() {
         livereload: true,
         port: 4000
     });
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Test (launch karma)
+//
+/////////////////////////////////////////////////////////////////////////////////////
+gulp.task('test', ['build'], function(done) {
+    karma.start({
+        configFile: __dirname + '/test/karma.conf.js',
+        singleRun: true
+    }, done);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
