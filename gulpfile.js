@@ -258,10 +258,11 @@ gulp.task('serve', ['build', 'watch'], function() {
 // Test (launch karma)
 //
 /////////////////////////////////////////////////////////////////////////////////////
-gulp.task('test', ['build'], function(done) {
+gulp.task('test', function(done) {
     karma.start({
         configFile: __dirname + '/test/karma.conf.js',
-        singleRun: true
+        singleRun: true,
+        browsers: ['PhantomJS']
     }, done);
 });
 
