@@ -11,3 +11,4 @@
 * ~~Migrate to Gulp and rewrite build process~~
 * Write actual models pulling data from a backend
 * Write E2E tests (using Karma and $httpBackend)
+* Add "feedback" button, dump full app state to recreate
