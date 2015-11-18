@@ -40,11 +40,18 @@ describe('sectorServices', function() {
       it('should return an in memory object when loaded', function(done) {
         var r1;
         var r2;
-        elementarySectors.getAll().then(function(r1) {
-          elementarySectors.getAll().should.eventually.eql(r1);
+        elementarySectors.getAll()
+        .then(function(r1) {
+          setTimeout(function() {
+            elementarySectors.getAll()
+            .then(function(r2) {
+              expect(r1).to.eql(r2);
+              done();
+            });
+            $rootScope.$digest();
+          }, 200);
         });
         $timeout.flush();
-        done();
       });
     });
 
