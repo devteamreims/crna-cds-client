@@ -13,11 +13,12 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai-as-promised', 'chai'],
+    frameworks: ['browserify', 'mocha', 'chai-as-promised', 'chai', 'sinon-chai'],
 
 
     // list of files / patterns to load in the browser
     files: bowerFiles.concat([
+      'test/unit/setup.js',
       'app/scripts/**/*.js',
       'dist/scripts/template*.js',
       'node_modules/angular-mocks/angular-mocks.js',
@@ -33,6 +34,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      'test/unit/setup.js': ['browserify']
     },
 
 

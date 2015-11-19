@@ -8,7 +8,7 @@ describe('sectorServices', function() {
     var $rootScope;
 
     // TODO : mock elementarySectors
-    // TODO : mock httpBackend request
+    // TODO : mock httpBackend request/response
 
     describe('getAll', function() {
       beforeEach(inject(function(_treeSectors_, _$timeout_, _$httpBackend_, _$rootScope_) {
