@@ -18,36 +18,43 @@ function elementarySectors(_, $q, $timeout, crnaAtomicSectors) {
 
   var sectors = [];
   var loadingPromise;
+  var service = {};
 
+  // Private functions
+  function _getFromBackend() {
+    var self = this;
+    if(loadingPromise !== undefined) {
+      // We are already loading from backend
+      return loadingPromise;
+    } else {
+      // TODO : replace by a real backend
+      loadingPromise = $timeout(function() {
+        sectors = angular.copy(crnaAtomicSectors);
+        return sectors;
+      }, 1000);
+      return loadingPromise;
+    }
+  }
+
+
+  // Public API
 
   /*
    * get all elementary sectors
    * returns a promise
    */
-  function getAll() {
+  service.getAll = function() {
     var self = this;
-    if(self.loadingPromise !== undefined) {
-      // We have something loading
-      return self.loadingPromise;
-    } else if(_.isEmpty(self.sectors)) { 
+    if(_.isEmpty(sectors)) { 
       // Nothing loaded, refresh from backend
-      self.loadingPromise = $timeout(function() {
-          self.sectors = angular.copy(crnaAtomicSectors);
-          return self.sectors;
-        }, 1000);
-      return self.loadingPromise;
-        
+      return _getFromBackend();
     } else {
       // We have in memory stuff, returns a mock promise
       var def = $q.defer();
-      def.resolve(self.sectors);
+      def.resolve(sectors);
       return def.promise;
     }
   }
-
-  var service = {
-    getAll: getAll
-  };
 
   return service;
 }
@@ -57,33 +64,38 @@ treeSectors.$inject = ['_', '$q', '$timeout', 'crnaSectors', 'elementarySectors'
 function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
   var sectors = [];
   var loadingPromise;
+  var service = {};
+
+
+  function _getFromBackend() {
+    if(loadingPromise === undefined) {
+      // We have nothing already loading
+      // create a promise
+      // TODO : replace by a real backend
+      loadingPromise = $timeout(function() {
+        return angular.copy(crnaSectors);
+      }, 500)
+      // Expand them
+      .then(function(s) {
+        sectors = _expandAll(s);
+        return sectors;
+      });
+    }
+    return loadingPromise;
+  }
+
 
   /*
    * get fully expanded sector tree
    * returns a promise
    */
-  function getAll() {
-    var self = this;
-    if(self.loadingPromise !== undefined) {
-      // We have something loading, return this promise
-      return self.loadingPromise;
-    } else if(_.isEmpty(self.sectors)) { // Nothing loaded, refresh from backend
-      
-      self.loadingPromise = 
-        $timeout(function() {
-          sectors = angular.copy(crnaSectors);
-          return sectors;
-        }, 500).then(function(sectors) {
-          self.sectors = _expandAll(sectors);
-          return self.sectors;
-        });
-
-      return self.loadingPromise;
-
+  service.getAll = function() {
+    if(_.isEmpty(sectors)) { // Nothing loaded, refresh from backend
+      return _getFromBackend();
     } else {
       // Sectors loaded, returns promise resolving to in memory stuff
       var def = $q.defer();
-      def.resolve(self.sectors);
+      def.resolve(sectors);
       return def.promise;
     }
   }
@@ -94,7 +106,7 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
    * elementary sectors given a grouping name
    *
   **/
-  function getFromString(str) {
+  service.getFromString = function(str) {
     var self = this;
     var promise = self.getAll()
     // getAll and expandAll
@@ -181,11 +193,6 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
     });
     return ret;
   }
-
-  var service = {
-    getAll: getAll,
-    getFromString: getFromString
-  };
 
   return service;
 }

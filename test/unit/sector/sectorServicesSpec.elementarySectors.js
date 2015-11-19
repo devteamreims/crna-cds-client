@@ -41,9 +41,11 @@ describe('sectorServices', function() {
         var r1;
         var r2;
         elementarySectors.getAll()
+        // Get from backend
         .then(function(r1) {
           setTimeout(function() {
             elementarySectors.getAll()
+            // Get again from memory
             .then(function(r2) {
               expect(r1).to.eql(r2);
               done();
