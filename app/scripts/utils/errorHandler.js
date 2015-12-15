@@ -33,20 +33,20 @@ function errorHandler() {
     var err = {
       type: 'error',
       string: errorString,
-      timestamp: new Date
+      timestamp: new Date()
     };
     errors.push(err);
     blocked = true;
     return err; 
-  }
+  };
 
   service.isErrored = function() {
     return blocked;
-  }
+  };
 
   service.getErrors = function() {
     return errors;
-  }
+  };
 
   return service;
 }
