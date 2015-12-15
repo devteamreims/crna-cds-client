@@ -13,8 +13,8 @@ angular.module('sectorServices', ['4meCdsConstants', 'underscore'])
 .factory('suggestedSectors', suggestedSectors);
 
 // Atomic / elementary sectors
-elementarySectors.$inject = ['_', '$q', '$http', 'crnaAtomicSectors', 'cdsBackendUrl'];
-function elementarySectors(_, $q, $http, crnaAtomicSectors, cdsBackendUrl) {
+elementarySectors.$inject = ['_', '$q', '$http', 'cdsBackendUrl'];
+function elementarySectors(_, $q, $http, cdsBackendUrl) {
 
   var sectors = [];
   var loadingPromise;
@@ -63,8 +63,8 @@ function elementarySectors(_, $q, $http, crnaAtomicSectors, cdsBackendUrl) {
 }
 
 
-treeSectors.$inject = ['_', '$q', '$http', 'crnaSectors', 'elementarySectors', 'cdsBackendUrl'];
-function treeSectors(_, $q, $http, crnaSectors, elementarySectors, cdsBackendUrl) {
+treeSectors.$inject = ['_', '$q', '$http', 'elementarySectors', 'cdsBackendUrl'];
+function treeSectors(_, $q, $http, elementarySectors, cdsBackendUrl) {
   var sectors = [];
   var loadingPromise;
   var service = {};
