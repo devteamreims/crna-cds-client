@@ -13,8 +13,8 @@ angular.module('sectorServices', ['4meCdsConstants', 'underscore'])
 .factory('suggestedSectors', suggestedSectors);
 
 // Atomic / elementary sectors
-elementarySectors.$inject = ['_', '$q', '$timeout', 'crnaAtomicSectors'];
-function elementarySectors(_, $q, $timeout, crnaAtomicSectors) {
+elementarySectors.$inject = ['_', '$q', '$http', 'crnaAtomicSectors', 'cdsBackendUrl'];
+function elementarySectors(_, $q, $http, crnaAtomicSectors, cdsBackendUrl) {
 
   var sectors = [];
   var loadingPromise;
@@ -22,16 +22,19 @@ function elementarySectors(_, $q, $timeout, crnaAtomicSectors) {
 
   // Private functions
   function _getFromBackend() {
-    var self = this;
     if(loadingPromise !== undefined) {
       // We are already loading from backend
       return loadingPromise;
     } else {
       // TODO : replace by a real backend
-      loadingPromise = $timeout(function() {
-        sectors = angular.copy(crnaAtomicSectors);
+      // 
+      loadingPromise = $http({
+        method: 'GET',
+        url: cdsBackendUrl + '/sectors/elementary'
+      }).then(function(res) {
+        sectors = res.data;
         return sectors;
-      }, 1000);
+      });
       return loadingPromise;
     }
   }
@@ -60,8 +63,8 @@ function elementarySectors(_, $q, $timeout, crnaAtomicSectors) {
 }
 
 
-treeSectors.$inject = ['_', '$q', '$timeout', 'crnaSectors', 'elementarySectors'];
-function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
+treeSectors.$inject = ['_', '$q', '$http', 'crnaSectors', 'elementarySectors', 'cdsBackendUrl'];
+function treeSectors(_, $q, $http, crnaSectors, elementarySectors, cdsBackendUrl) {
   var sectors = [];
   var loadingPromise;
   var service = {};
@@ -72,12 +75,15 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
       // We have nothing already loading
       // create a promise
       // TODO : replace by a real backend
-      loadingPromise = $timeout(function() {
-        return angular.copy(crnaSectors);
-      }, 500)
+      loadingPromise = $http({
+        method: 'GET',
+        url: cdsBackendUrl + '/sectors/tree'
+      })
       // Expand them
-      .then(function(s) {
-        sectors = _expandAll(s);
+      // TODO : Put this back in the backend
+      .then(function(res) {
+        //sectors = _expandAll(s);
+        sectors = res.data;
         return sectors;
       });
     }
@@ -91,7 +97,8 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
    */
   service.getAll = function() {
     if(_.isEmpty(sectors)) { // Nothing loaded, refresh from backend
-      return _getFromBackend();
+      var p = _getFromBackend();
+      return p;
     } else {
       // Sectors loaded, returns promise resolving to in memory stuff
       var def = $q.defer();
@@ -109,7 +116,6 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
   service.getFromString = function(str) {
     var self = this;
     var promise = self.getAll()
-    // getAll and expandAll
     .then(function(sectors) {
       // Find with string
       var sectorsGroup = _.findWhere(sectors, {name: str});
@@ -118,7 +124,11 @@ function treeSectors(_, $q, $timeout, crnaSectors, elementarySectors) {
         return [];
       } else {
         // Return array of children
-        return sectorsGroup.children;
+        if(_.isEmpty(sectorsGroup.children)) {
+          return [sectorsGroup.name]; // Elementary sector detected, return a single sector
+        } else {
+          return sectorsGroup.children; // Return group of elementary sectors
+        }
       }
     });
     return promise;

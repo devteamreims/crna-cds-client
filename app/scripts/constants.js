@@ -16,6 +16,8 @@ angular.module('4meCdsConstants', [])
     'E', 'UE', 'XE', 'KE', 'HE',
     'SE', 'UH', 'XH', 'KH', 'HH'
 ])
+// Config
+.constant('cdsBackendUrl', 'http://localhost:3000')
 .constant('crnaSectors',[ 
     { name: 'UXR',    children: ['UR', 'XR'] },
     { name: 'UXKR',   children: ['UXR', 'KR'] },

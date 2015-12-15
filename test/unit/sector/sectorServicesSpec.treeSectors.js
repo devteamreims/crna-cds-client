@@ -1,44 +1,63 @@
 describe('sectorServices', function() {
   // Load sectorServices module
   beforeEach(module('sectorServices'));
+  beforeEach(module('4meCdsConstants'));
+
   describe('treeSectors', function() {
     var treeSectors;
     var $httpBackend;
     var $timeout;
     var $rootScope;
 
-    // TODO : mock elementarySectors
-    // TODO : mock httpBackend request/response
+    var mockElementarySectors = {};
+    var mockCrnaSectors = [
+      {name: 'UXR', children: ['UR', 'XR']},
+      {name: 'KHR', children: ['KR', 'YR', 'HR']},
+      {name: '5R', children: ['KHR', 'UXR']}
+    ];
 
-    describe('getAll', function() {
-      beforeEach(inject(function(_treeSectors_, _$timeout_, _$httpBackend_, _$rootScope_) {
+
+    // DONE : mock elementarySectors
+    // DONE : mock httpBackend request/response
+
+    beforeEach(function() {
+      mockElementarySectors.getAll = sinon.stub().resolves(['UR', 'XR', 'KR', 'YR', 'HR']);
+
+      module(function($provide) {
+        $provide.value('elementarySectors', mockElementarySectors);
+        $provide.constant('crnaSectors', mockCrnaSectors)
+      });
+
+      inject(function(_$timeout_, _$q_, _$httpBackend_, _$rootScope_, _treeSectors_, _cdsBackendUrl_) {
+        sinonAsPromised(_$q_);
+
         treeSectors = _treeSectors_;
         // We need this stuff to resolve promises
         $timeout = _$timeout_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
-      }));
+        // Fake backend here
+        elemSectorsHandler = $httpBackend.when('GET', _cdsBackendUrl_ + '/sectors/tree')
+          .respond([
+            {name: 'UXR', children: ['UR', 'XR']},
+            {name: 'UR', children: []},
+            {name: '5R', children: ['UR', 'XR', 'KR', 'YR', 'HR']}
+          ]);
+      });
+    });
 
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    describe('getAll', function() {
       it('should return an array containing all sectors', function(done) {
         treeSectors.getAll()
-        //  .then(function(res) { dump(res); return res; })
           .should.eventually.contain({name: 'UXR', children: ['UR', 'XR']})
           .notify(done);
         // Promises won't resolve without this
-        // Here, we have 2 timeouts
-        $timeout.flush();
-        $timeout.flush();
-      });
-
-      it('should return an array containing expanded sectors', function(done) {
-        treeSectors.getAll()
-          .should.eventually.contain(
-            {name: '4E', children: ['UE', 'XE', 'KE', 'HE']}
-          )
-          .notify(done);
-
-          $timeout.flush();
-          $timeout.flush();
+        $httpBackend.flush();
       });
 
       it('should return the former loading promise when called again', function(done) {
@@ -46,6 +65,7 @@ describe('sectorServices', function() {
         var second = treeSectors.getAll();
         expect(first).to.eql(second);
         done();
+        $httpBackend.flush();
       });
 
       it('should return an in memory object when loaded', function(done) {
@@ -62,37 +82,27 @@ describe('sectorServices', function() {
               done();
             });
             $rootScope.$digest();
-          }, 600);
+          }, 200);
         });
-        $timeout.flush();
-        $timeout.flush();
+        $httpBackend.flush();
       });
     });
 
     describe('getFromString', function() {
-      beforeEach(inject(function(_treeSectors_, _$timeout_, _$httpBackend_, _$rootScope_) {
-        treeSectors = _treeSectors_;
-        // We need this stuff to resolve promises
-        $timeout = _$timeout_;
-        $httpBackend = _$httpBackend_;
-        $rootScope = _$rootScope_;
-      }));
-
       it('should return proper children from string', function(done) {
-        treeSectors.getFromString('4E')
-        .should.eventually.eql(['UE', 'XE', 'KE', 'HE'])
+        treeSectors.getFromString('UXR')
+        .should.eventually.eql(['UR', 'XR'])
         .notify(done);
 
-        $timeout.flush();
-        $timeout.flush();
+        $httpBackend.flush();
       });
 
       it('should return a single sector in case of elementary sector', function(done) {
-        treeSectors.getFromString('UE')
-        .should.eventually.eql(['UE'])
+        treeSectors.getFromString('UR')
+        .should.eventually.eql(['UR'])
         .notify(done);
-        $timeout.flush();
-        $timeout.flush();
+
+        $httpBackend.flush();
       });
 
       it('should return an empty array given an unknown sector group', function(done) {
@@ -100,8 +110,7 @@ describe('sectorServices', function() {
         .should.eventually.eql([])
         .notify(done);
 
-        $timeout.flush();
-        $timeout.flush();
+        $httpBackend.flush();
       });
     });
   });

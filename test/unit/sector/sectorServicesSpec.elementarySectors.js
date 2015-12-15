@@ -10,22 +10,27 @@ describe('sectorServices', function() {
     var $httpBackend;
     var $timeout;
     var $rootScope;
-    beforeEach(inject(function(_elementarySectors_, _$timeout_, _$httpBackend_, _$rootScope_) {
+    beforeEach(inject(function(_elementarySectors_, _$timeout_, _$httpBackend_, _$rootScope_, _cdsBackendUrl_) {
       elementarySectors = _elementarySectors_;
       // We need this stuff to resolve promises
       $timeout = _$timeout_;
       $httpBackend = _$httpBackend_;
       $rootScope = _$rootScope_;
+      // Fake backend here
+      elemSectorsHandler = $httpBackend.when('GET', _cdsBackendUrl_ + '/sectors/elementary')
+        .respond(['UR', 'XR', 'KR', 'YR', 'HR']);
     }));
+
+    afterEach(function() {
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+    });
 
     describe('getAll', function() {
       it('should return an array containing elementary sectors', function(done) {
         elementarySectors.getAll()
-//          .then(function(res) { dump(res); return res; })
           .should.eventually.contain('UR')
           .notify(done);
-        // Promises won't resolve without this
-        $timeout.flush();
         // Here we flush our http requests;
         $httpBackend.flush();
       });
@@ -34,6 +39,7 @@ describe('sectorServices', function() {
         var first = elementarySectors.getAll();
         var second = elementarySectors.getAll();
         expect(first).to.eql(second);
+        $httpBackend.flush();
         done();
       });
 
@@ -53,7 +59,7 @@ describe('sectorServices', function() {
             $rootScope.$digest();
           }, 200);
         });
-        $timeout.flush();
+        $httpBackend.flush();
       });
     });
 
