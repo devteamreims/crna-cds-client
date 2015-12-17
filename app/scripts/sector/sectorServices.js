@@ -76,15 +76,11 @@ function treeSectors(_, $q, $http, elementarySectors, cdsBackendUrl) {
     if(loadingPromise === undefined) {
       // We have nothing already loading
       // create a promise
-      // TODO : replace by a real backend
       loadingPromise = $http({
         method: 'GET',
         url: apiEndpoint
       })
-      // Expand them
-      // TODO : Put this back in the backend
       .then(function(res) {
-        //sectors = _expandAll(s);
         sectors = res.data;
         return sectors;
       });
@@ -125,85 +121,10 @@ function treeSectors(_, $q, $http, elementarySectors, cdsBackendUrl) {
         // Not found ! Should never happen ?
         return [];
       } else {
-        // Return array of children
-        if(_.isEmpty(sectorsGroup.children)) {
-          return [sectorsGroup.name]; // Elementary sector detected, return a single sector
-        } else {
-          return sectorsGroup.children; // Return group of elementary sectors
-        }
+        return sectorsGroup.elementarySectors; // Return group of elementary sectors
       }
     });
     return promise;
-  }
-
-  /*
-   * _expandAll() (async)
-   * returns a promise of expanded sectors tree
-   * sets internal sectors var to expanded sectors tree
-   *
-   */
-  function _expandAll(input) {
-    // Multiple loops here !
-    // TODO : This logic belongs in the backend
-    var self = this;
-    var expanded = [];
-    // Get all elementary sectors
-    return elementarySectors.getAll()
-    .then(function(elemSect) {
-      // Loop through initial list
-      _.each(input, function(nonExSector) {
-        var children = [];
-        // Loop through children
-        _.each(nonExSector.children, function(c) {
-          children.push(_expandSingle(c, input, elemSect));
-        });
-        expanded.push({
-          name: nonExSector.name,
-          children: _.flatten(children)
-        });
-      });
-      // Add elementary sectors
-      _.each(elemSect, function(e) {
-        expanded.push({
-          name: e,
-          children: [e]
-        });
-      });
-      return expanded;
-    });
-  }
-
-  /*
-   * _expandSingle() (sync)
-   * name : string containing the name of the sector grouping
-   * tree : full tree
-   * elem : array of elementary sectors
-   * returns an array with expanded children
-   * this should be recursive :
-   * KD2F -> [KD, 2F] -> [KD, KF, UF]
-   */
-  function _expandSingle(name, tree, elem) {
-    if(_.contains(elem, name)) {
-      // name is already an elementary sector
-      return [name];
-    }
-    var ret = [];
-    var treeMap = _.findWhere(tree, {name: name});
-    _.each(treeMap.children, function(c) {
-      // Loop through children
-      if(_.contains(elem, c)) {
-        // This child is an elementary sector, add it to ret
-        ret.push(c);
-        return; // Go to the next item
-      } else {
-        // This child is not an elementary sector, expand it
-        ret.push(_expandSingle(c, tree, elem));
-        // Flatten the array
-        ret = _.flatten(ret);
-        return;
-      }
-    });
-    return ret;
   }
 
   return service;
