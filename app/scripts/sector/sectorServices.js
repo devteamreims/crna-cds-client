@@ -19,6 +19,7 @@ function elementarySectors(_, $q, $http, cdsBackendUrl) {
   var sectors = [];
   var loadingPromise;
   var service = {};
+  var apiEndpoint = cdsBackendUrl + '/sectors/elementary';
 
   // Private functions
   function _getFromBackend() {
@@ -30,7 +31,7 @@ function elementarySectors(_, $q, $http, cdsBackendUrl) {
       // 
       loadingPromise = $http({
         method: 'GET',
-        url: cdsBackendUrl + '/sectors/elementary'
+        url: apiEndpoint
       }).then(function(res) {
         sectors = res.data;
         return sectors;
@@ -68,6 +69,7 @@ function treeSectors(_, $q, $http, elementarySectors, cdsBackendUrl) {
   var sectors = [];
   var loadingPromise;
   var service = {};
+  var apiEndpoint = cdsBackendUrl + '/sectors/tree';
 
 
   function _getFromBackend() {
@@ -77,7 +79,7 @@ function treeSectors(_, $q, $http, elementarySectors, cdsBackendUrl) {
       // TODO : replace by a real backend
       loadingPromise = $http({
         method: 'GET',
-        url: cdsBackendUrl + '/sectors/tree'
+        url: apiEndpoint
       })
       // Expand them
       // TODO : Put this back in the backend
