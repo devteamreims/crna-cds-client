@@ -39,9 +39,9 @@ describe('sectorServices', function() {
         // Fake backend here
         elemSectorsHandler = $httpBackend.when('GET', _cdsBackendUrl_ + '/sectors/tree')
           .respond([
-            {name: 'UXR', children: ['UR', 'XR']},
-            {name: 'UR', children: []},
-            {name: '5R', children: ['UR', 'XR', 'KR', 'YR', 'HR']}
+            {name: 'UXR', elementarySectors: ['UR', 'XR']},
+            {name: 'UR', elementarySectors: ['UR']},
+            {name: '5R', elementarySectors: ['UR', 'XR', 'KR', 'YR', 'HR']}
           ]);
       });
     });
@@ -54,7 +54,7 @@ describe('sectorServices', function() {
     describe('getAll', function() {
       it('should return an array containing all sectors', function(done) {
         treeSectors.getAll()
-          .should.eventually.contain({name: 'UXR', children: ['UR', 'XR']})
+          .should.eventually.contain({name: 'UXR', elementarySectors: ['UR', 'XR']})
           .notify(done);
         // Promises won't resolve without this
         $httpBackend.flush();
@@ -107,7 +107,7 @@ describe('sectorServices', function() {
 
       it('should return an empty array given an unknown sector group', function(done) {
         treeSectors.getFromString('foo')
-        .should.eventually.eql([])
+        .should.eventually.eql(['foo'])
         .notify(done);
 
         $httpBackend.flush();

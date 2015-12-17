@@ -69,9 +69,11 @@ function ctrlroomButtonController(_, ctrlroomManager, $scope, $q, $timeout, $mdD
   vm.positionDisabled = true;
   vm.loading = true;
 
-  ctrlroomManager.refreshAll(); // This needs to be set somewhere else : see ui-router
+  ctrlroomManager.refreshAll().then(function() {
+    vm.positionDisabled = vm.position.disabled;
+    vm.loading = false;
+  }); // This needs to be set somewhere else : see ui-router
 
-  vm.loading = false;
   vm.position = ctrlroomManager.getSingle($scope.position);
 
   vm.positionClass = function(position) {

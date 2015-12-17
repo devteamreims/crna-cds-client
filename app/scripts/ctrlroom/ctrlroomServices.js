@@ -13,8 +13,8 @@ angular.module('ctrlroomServices', ['4meCdsConstants', 'underscore', 'sectorServ
 
 
 /* Whole control room management */
-ctrlroomManager.$inject = ['_', '$q', '$timeout', 'crnaPositions','ctrlroomPosition'];
-function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
+ctrlroomManager.$inject = ['_', '$q', '$timeout', 'crnaPositions','ctrlroomPosition', '$http', 'cdsBackendUrl'];
+function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition, $http, cdsBackendUrl) {
   /*
    * Format :
    * {
@@ -32,15 +32,17 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
     hasChanges: false,
     loading: true
   };
+  var apiEndpoints = {
+    getAll: cdsBackendUrl + '/positions',
+    getSingle: cdsBackendUrl + '/positions/', // + positionId
+    addSectors: '/addSectors' // getSingle + positionId + addSectors
+  };
+  var loadingPromise;
 
   /*
    * Populate array with empty objects
   */
-  _.each(crnaPositions, function(positionId) {
-    var positionInstance = ctrlroomPosition.getInstance(parseInt(positionId));
-    positionInstance.disabled = false; // Set disabled to false
-    positions.push(positionInstance);
-  });
+  _getFromBackend();
 
   /*
    * getSingle(positionId)
@@ -48,96 +50,52 @@ function ctrlroomManager(_, $q, $timeout, crnaPositions, ctrlroomPosition) {
   */
   function getSingle(positionId) {
     // Locate current position in our collection
-    var s = _.findWhere(positions, {id: positionId});
-    if(s === undefined) { // Positions 15 and 16 ?
-      s = ctrlroomPosition.getInstance(positionId);
+    var s = _.findWhere(positions, {id: parseInt(positionId)});
+    if(s === undefined) {
+      s = ctrlroomPosition.getInstance(parseInt(positionId));
+      positions.push(s);
     }
     return s;
   }
 
+  function _getFromBackend() {
+    properties.loading = true;
+    // Create a placeholder array
+    _.each(crnaPositions, function(p) {
+      var positionInstance = ctrlroomPosition.getInstance(parseInt(p));
+      positionInstance.disabled = true;
+    });
+
+    if(loadingPromise === undefined) {
+      // We have nothing already loading
+      // create a promise
+      loadingPromise = $http({
+        method: 'GET',
+        url: apiEndpoints.getAll
+      })
+      .then(function(res) {
+        console.log(res.data);
+        _.each(res.data, function(p) {
+          console.log(p);
+          var positionInstance = getSingle(parseInt(p.id));
+          positionInstance.disabled = p.disabled;
+          positionInstance.setSectors(p.sectors);
+          positionInstance.changed = false;
+        })
+        properties.loading = false;
+        console.log('Data loaded from backend !');
+        console.log(positions);
+        return positions;
+      });
+    }
+    return loadingPromise;
+  }
   /*
    * refreshAll()
    * refresh all position statuses from server
   */
   function refreshAll() {
-    var self = this;
-    // Simulate async stuff
-    var promises = [];
-    properties.loading = true;
-    _.each(crnaPositions, function(positionId) { /* Mock 3 open positions */
-      positionId = parseInt(positionId);
-      if(positionId === 31) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['UR', 'XR']);
-            s.changed = false;
-          }, 200)
-        );
-      } else if(positionId === 32) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['KR', 'YR', 'HR']);
-            s.changed = false;
-          }, 400)
-        );
-      } else if(positionId === 36) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['UN', 'UB', 'KN', 'HN']);
-            s.changed = false;
-          }, 800)
-        );
-      } else if(positionId === 21) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['UH', 'XH', 'KH', 'HH']);
-            s.changed = false;
-          }, 400)
-        );
-      } else if(positionId === 25) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['UE', 'XE', 'KE', 'HE']);
-            s.changed = false;
-          }, 800)
-        );
-      } else if(positionId === 23) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['E', 'SE']);
-            s.changed = false;
-          }, 1200)
-        );
-      } else if(positionId === 20) {
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors(['KD', 'KF', 'UF']);
-            s.changed = false;
-          }, 600)
-        );
-      } else {
-        // Empty position
-        promises.push(
-          $timeout(function() {
-            var s = _.findWhere(positions, {id: positionId});
-            s.setSectors([]);
-            s.changed = false;
-          }, 10)
-        );
-      }
-    });
-
-    return $q.all(promises).then(function() {
-      properties.loading = false;
-      properties.hasChanges = false;
-    });
+    return _getFromBackend();
   }
 
   function addSectors(newPosition, sectors) {
@@ -233,7 +191,7 @@ function ctrlroomPosition(_, $q, $timeout, crnaPositions, elementarySectors, tre
       var sectorString = '-';
       if(s.length !== 0) {
         var sct = _.find(allSectors, function(e) {
-          return _.isEqual(s.sort(), e.children.sort());
+          return _.isEqual(s.sort(), e.elementarySectors.sort());
         });
         if(sct === undefined) {
           // Grouping not found, fallback to elementary sectors with commas

@@ -118,8 +118,8 @@ function treeSectors(_, $q, $http, elementarySectors, cdsBackendUrl) {
       // Find with string
       var sectorsGroup = _.findWhere(sectors, {name: str});
       if(sectorsGroup === undefined) {
-        // Not found ! Should never happen ?
-        return [];
+        // Not found ! Should never happen !
+        return [str];
       } else {
         return sectorsGroup.elementarySectors; // Return group of elementary sectors
       }
