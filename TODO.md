@@ -12,3 +12,8 @@
 * Write actual models pulling data from a backend
 * Write E2E tests (using Karma and $httpBackend)
 * Add "feedback" button, dump full app state to recreate
+
+
+* Ideas :
+ * Add backuped frequencies to our control room map
+ * Drag n drop ? See angular material wether it's easy or not
